@@ -1,5 +1,8 @@
 package com.projectbox.footballmatchschedule
 
+import android.content.Context
+import com.projectbox.footballmatchschedule.repository.FavoriteManagedDB
+import com.projectbox.footballmatchschedule.viewmodel.ScheduleDetailVM
 import com.projectbox.footballmatchschedule.viewmodel.ScheduleVM
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -23,8 +26,10 @@ class KoinModules {
         return applicationContext {
             bean { createInterceptor() }
             bean { createService(get(), getProperty(URL)) }
+            bean { favScheduleDB(get()) }
 
-            viewModel { ScheduleVM(get()) }
+            viewModel { ScheduleVM(get(), get()) }
+            viewModel { ScheduleDetailVM(get()) }
         }
     }
 
@@ -45,5 +50,9 @@ class KoinModules {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
         return retrofit.create(IService::class.java)
+    }
+
+    private fun favScheduleDB(context: Context): FavoriteManagedDB {
+        return FavoriteManagedDB(context)
     }
 }

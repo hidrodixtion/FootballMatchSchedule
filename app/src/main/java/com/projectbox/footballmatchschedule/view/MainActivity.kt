@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
             when(value) {
                 ScheduleType.Past -> supportActionBar?.title = "Past Schedules"
                 ScheduleType.Next -> supportActionBar?.title = "Next Schedules"
+                ScheduleType.Favorite -> supportActionBar?.title = "Favorite Schedules"
             }
         }
 
@@ -54,6 +55,10 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.menu_next -> {
                 currentSchedule = ScheduleType.Next
+                true
+            }
+            R.id.menu_favorite -> {
+                currentSchedule = ScheduleType.Favorite
                 true
             }
             else -> false

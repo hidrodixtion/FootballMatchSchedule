@@ -5,5 +5,6 @@ package com.projectbox.footballmatchschedule.model
  */
 enum class ScheduleType {
     Past,
-    Next
+    Next,
+    Favorite
 }

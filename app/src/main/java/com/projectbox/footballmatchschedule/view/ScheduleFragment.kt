@@ -49,7 +49,10 @@ class ScheduleFragment : Fragment() {
 
         initUI()
         initVMObserver()
+    }
 
+    override fun onStart() {
+        super.onStart()
         vmSchedule.getSchedule(ScheduleType.valueOf(arguments!!.getString(EXT_SCHEDULE)))
     }
 

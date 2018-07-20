@@ -14,6 +14,9 @@ data class ScheduleResponse(
 
 @Parcelize
 data class Schedule(
+        @SerializedName("idEvent")
+        val scheduleID: String,
+
         @SerializedName("idHomeTeam")
         val homeID: String,
 
@@ -31,9 +34,6 @@ data class Schedule(
 
         @SerializedName("intAwayScore")
         val awayScore: Int?,
-
-        @SerializedName("strDate")
-        val date: String?,
 
         @SerializedName("strHomeGoalDetails")
         val homeGoalDetails: String?,
@@ -69,5 +69,8 @@ data class Schedule(
         val awayMid: String?,
 
         @SerializedName("strAwayLineupForward")
-        val awayFW: String?
+        val awayFW: String?,
+
+        @SerializedName("strDate")
+        val date: String?
 ) : Parcelable

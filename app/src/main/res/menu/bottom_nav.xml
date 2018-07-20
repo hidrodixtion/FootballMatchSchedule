@@ -9,4 +9,9 @@
         android:id="@+id/menu_next"
         android:title="@string/next"
         android:icon="@drawable/ic_next"/>
+
+    <item
+        android:id="@+id/menu_favorite"
+        android:title="@string/favorites"
+        android:icon="@drawable/ic_add_to_favorites"/>
 </menu>
