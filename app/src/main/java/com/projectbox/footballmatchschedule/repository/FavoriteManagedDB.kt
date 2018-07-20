@@ -2,7 +2,6 @@ package com.projectbox.footballmatchschedule.repository
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
-import com.google.gson.annotations.SerializedName
 import org.jetbrains.anko.db.*
 
 /**
@@ -43,7 +42,6 @@ class FavoriteManagedDB(context: Context) : ManagedSQLiteOpenHelper(context, "Fa
 object FavoriteScheduleColumns {
     const val TABLE_NAME = "table_schedule"
 
-    const val C_ROW_ID = "row_id"
     const val C_ID = "schedule_id"
     const val C_HOME_ID = "home_id"
     const val C_AWAY_ID = "away_id"

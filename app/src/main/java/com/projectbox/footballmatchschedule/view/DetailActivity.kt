@@ -1,9 +1,9 @@
 package com.projectbox.footballmatchschedule.view
 
 import android.arch.lifecycle.Observer
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
 import com.bumptech.glide.Glide
@@ -15,9 +15,7 @@ import com.projectbox.footballmatchschedule.viewmodel.ScheduleDetailVM
 import kotlinx.android.synthetic.main.activity_detail.*
 import org.jetbrains.anko.ctx
 import org.jetbrains.anko.design.snackbar
-import org.jetbrains.anko.itemsSequence
 import org.koin.android.architecture.ext.viewModel
-import timber.log.Timber
 
 class DetailActivity : AppCompatActivity() {
 
@@ -25,12 +23,12 @@ class DetailActivity : AppCompatActivity() {
         const val EXT_SCHEDULE = "schedule"
     }
 
-    val vmDetail by viewModel<ScheduleDetailVM>()
+    private val vmDetail by viewModel<ScheduleDetailVM>()
 
-    lateinit var schedule: Schedule
-    var menuItem: MenuItem? = null
+    private lateinit var schedule: Schedule
+    private var menuItem: MenuItem? = null
 
-    var isFavorite = false
+    private var isFavorite = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -119,8 +117,6 @@ class DetailActivity : AppCompatActivity() {
         vmDetail.isFavoriteSchedule.observe(this, Observer {
             val fav = it ?: return@Observer
 
-            Timber.v(fav.toString())
-            Timber.v(menuItem?.toString())
             if (fav)
                 menuItem?.icon = ContextCompat.getDrawable(ctx, R.drawable.ic_added_to_favorites)
             else

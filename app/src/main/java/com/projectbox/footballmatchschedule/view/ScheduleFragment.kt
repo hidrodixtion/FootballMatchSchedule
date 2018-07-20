@@ -34,7 +34,7 @@ class ScheduleFragment : Fragment() {
         }
     }
 
-    val vmSchedule by viewModel<ScheduleVM>()
+    private val vmSchedule by viewModel<ScheduleVM>()
 
     private lateinit var adapter: ScheduleAdapter
 

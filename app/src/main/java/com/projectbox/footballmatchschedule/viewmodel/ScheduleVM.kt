@@ -1,13 +1,14 @@
 package com.projectbox.footballmatchschedule.viewmodel
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.projectbox.footballmatchschedule.IService
-import com.projectbox.footballmatchschedule.model.*
+import com.projectbox.footballmatchschedule.model.AppData
+import com.projectbox.footballmatchschedule.model.Schedule
+import com.projectbox.footballmatchschedule.model.ScheduleResponse
+import com.projectbox.footballmatchschedule.model.ScheduleType
 import com.projectbox.footballmatchschedule.repository.FavoriteManagedDB
 import com.projectbox.footballmatchschedule.repository.FavoriteScheduleColumns
-import com.projectbox.footballmatchschedule.view.ScheduleFragment
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
@@ -57,11 +58,10 @@ class ScheduleVM(private val service: IService, private val db: FavoriteManagedD
         }
     }
 
-    fun getFavoriteSchedules() {
+    private fun getFavoriteSchedules() {
         db.use {
             val result = select(FavoriteScheduleColumns.TABLE_NAME)
-            val list = result.parseList(classParser<Schedule>())
-            scheduleList.value = result.parseList(classParser<Schedule>())
+            scheduleList.value = result.parseList(classParser())
         }
     }
 }

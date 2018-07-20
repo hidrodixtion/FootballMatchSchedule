@@ -1,14 +1,15 @@
 package com.projectbox.footballmatchschedule.viewmodel
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.database.sqlite.SQLiteConstraintException
 import com.projectbox.footballmatchschedule.model.Schedule
 import com.projectbox.footballmatchschedule.repository.FavoriteManagedDB
 import com.projectbox.footballmatchschedule.repository.FavoriteScheduleColumns
-import org.jetbrains.anko.db.*
-import timber.log.Timber
+import org.jetbrains.anko.db.classParser
+import org.jetbrains.anko.db.delete
+import org.jetbrains.anko.db.insert
+import org.jetbrains.anko.db.select
 
 /**
  * Created by adinugroho
@@ -21,7 +22,7 @@ class ScheduleDetailVM(private val db: FavoriteManagedDB) : ViewModel() {
         db.use {
             val result = select(FavoriteScheduleColumns.TABLE_NAME).whereArgs("${FavoriteScheduleColumns.C_ID} = {id}", "id" to id)
             val favorites = result.parseList(classParser<Schedule>())
-            isFavoriteSchedule.value = (favorites.size > 0)
+            isFavoriteSchedule.value = (favorites.isNotEmpty())
         }
     }
 
