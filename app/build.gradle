@@ -38,6 +38,12 @@ android {
     androidExtensions {
         experimental = true
     }
+
+    kotlin {
+        experimental {
+            coroutines "enable"
+        }
+    }
 }
 
 dependencies {
@@ -59,6 +65,7 @@ dependencies {
     //anko
     implementation "org.jetbrains.anko:anko:$anko_version"
     implementation "org.jetbrains.anko:anko-design:$anko_version"
+    implementation "org.jetbrains.anko:anko-coroutines:$anko_version"
 
     implementation "android.arch.lifecycle:extensions:1.1.1"
     // Koin for Android
@@ -83,4 +90,7 @@ dependencies {
     implementation 'org.greenrobot:eventbus:3.1.1'
 
     implementation 'com.facebook.stetho:stetho:1.5.0'
+
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.23.4"
+    implementation 'ru.gildor.coroutines:kotlin-coroutines-retrofit:0.11.0'
 }
