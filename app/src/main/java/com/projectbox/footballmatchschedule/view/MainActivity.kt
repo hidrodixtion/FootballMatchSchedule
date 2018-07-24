@@ -5,10 +5,13 @@ import android.os.Bundle
 import android.support.design.internal.BottomNavigationMenu
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentPagerAdapter
 import com.projectbox.footballmatchschedule.R
 import com.projectbox.footballmatchschedule.event.ScheduleClickEvent
 import com.projectbox.footballmatchschedule.model.ScheduleType
+import com.projectbox.footballmatchschedule.pageradapter.SchedulePagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.content_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.jetbrains.anko.startActivity
@@ -16,25 +19,14 @@ import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
-    private var currentSchedule: ScheduleType = ScheduleType.Past
-        set(value) {
-            val fragment = ScheduleFragment.getInstance(value)
-            openFragment(fragment)
-
-            when(value) {
-                ScheduleType.Past -> supportActionBar?.title = "Past Schedules"
-                ScheduleType.Next -> supportActionBar?.title = "Next Schedules"
-                ScheduleType.Favorite -> supportActionBar?.title = "Favorite Schedules"
-            }
-        }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         bottom_navbar.setOnNavigationItemSelectedListener(onNavigationItemSelected)
+        bottom_navbar.selectedItemId = R.id.menu_schedule
 
-        currentSchedule = ScheduleType.Past
+        initUI()
     }
 
     override fun onStart() {
@@ -49,27 +41,32 @@ class MainActivity : AppCompatActivity() {
 
     private val onNavigationItemSelected = BottomNavigationView.OnNavigationItemSelectedListener {
         return@OnNavigationItemSelectedListener when(it.itemId) {
-            R.id.menu_prev -> {
-                currentSchedule = ScheduleType.Past
+            R.id.menu_schedule -> {
+                openViewPager(SchedulePagerAdapter(supportFragmentManager))
                 true
             }
-            R.id.menu_next -> {
-                currentSchedule = ScheduleType.Next
+            R.id.menu_team -> {
+//                currentSchedule = ScheduleType.Next
                 true
             }
             R.id.menu_favorite -> {
-                currentSchedule = ScheduleType.Favorite
+//                currentSchedule = ScheduleType.Favorite
                 true
             }
             else -> false
         }
     }
 
-    private fun openFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .addToBackStack(null)
-                .commit()
+    private fun initUI() {
+        tab.setupWithViewPager(view_pager)
+
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = "Football Match App"
+    }
+
+    private fun openViewPager(adapter: FragmentPagerAdapter) {
+        view_pager.removeAllViews()
+        view_pager.adapter = adapter
     }
 
     @Subscribe

@@ -53,10 +53,11 @@ class ScheduleFragment : Fragment() {
 
     override fun onStart() {
         super.onStart()
-        vmSchedule.getSchedule(ScheduleType.valueOf(arguments!!.getString(EXT_SCHEDULE)))
     }
 
     private fun initUI() {
+        vmSchedule.getSchedule(ScheduleType.valueOf(arguments!!.getString(EXT_SCHEDULE)))
+
         recycler_view.layoutManager = LinearLayoutManager(ctx)
         recycler_view.setHasFixedSize(true)
 

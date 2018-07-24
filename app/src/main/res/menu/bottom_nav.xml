@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/menu_prev"
-        android:title="@string/past"
-        android:icon="@drawable/ic_past"/>
+        android:id="@+id/menu_schedule"
+        android:title="@string/schedules"
+        android:icon="@drawable/ic_next"/>
 
     <item
-        android:id="@+id/menu_next"
-        android:title="@string/next"
-        android:icon="@drawable/ic_next"/>
+        android:id="@+id/menu_team"
+        android:title="@string/teams"
+        android:icon="@drawable/ic_teams"/>
 
     <item
         android:id="@+id/menu_favorite"

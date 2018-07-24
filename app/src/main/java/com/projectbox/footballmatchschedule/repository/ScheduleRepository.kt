@@ -14,7 +14,7 @@ class ScheduleRepository(private val service: IService) {
     suspend fun getSchedules(scheduleType: ScheduleType): List<Schedule> {
         val request = when (scheduleType) {
             ScheduleType.Past -> service.getPastLeague()
-            ScheduleType.Next -> service.getPastLeague()
+            ScheduleType.Next -> service.getNextLeague()
             ScheduleType.Favorite -> return emptyList()
         }
 
