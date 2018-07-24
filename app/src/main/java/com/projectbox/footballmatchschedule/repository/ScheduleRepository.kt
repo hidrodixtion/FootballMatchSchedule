@@ -11,10 +11,10 @@ import timber.log.Timber
  * Created by adinugroho
  */
 class ScheduleRepository(private val service: IService) {
-    suspend fun getSchedules(scheduleType: ScheduleType): List<Schedule> {
+    suspend fun getSchedules(scheduleType: ScheduleType, leagueID: String): List<Schedule> {
         val request = when (scheduleType) {
-            ScheduleType.Past -> service.getPastLeague()
-            ScheduleType.Next -> service.getNextLeague()
+            ScheduleType.Past -> service.getPastLeague(leagueID)
+            ScheduleType.Next -> service.getNextLeague(leagueID)
             ScheduleType.Favorite -> return emptyList()
         }
 

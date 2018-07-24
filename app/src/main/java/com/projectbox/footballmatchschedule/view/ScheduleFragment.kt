@@ -8,14 +8,18 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 
 import com.projectbox.footballmatchschedule.R
 import com.projectbox.footballmatchschedule.adapter.ScheduleAdapter
+import com.projectbox.footballmatchschedule.model.AppData
 import com.projectbox.footballmatchschedule.model.ScheduleType
 import com.projectbox.footballmatchschedule.viewmodel.ScheduleVM
 import kotlinx.android.synthetic.main.fragment_schedule.*
 import org.jetbrains.anko.support.v4.ctx
 import org.koin.android.architecture.ext.viewModel
+import timber.log.Timber
 
 /**
  * A simple [Fragment] subclass.
@@ -56,8 +60,27 @@ class ScheduleFragment : Fragment() {
     }
 
     private fun initUI() {
-        vmSchedule.getSchedule(ScheduleType.valueOf(arguments!!.getString(EXT_SCHEDULE)))
+        val args = arguments ?: return
+        val schedule = ScheduleType.valueOf(args.getString(EXT_SCHEDULE))
 
+        vmSchedule.getSchedule(schedule)
+
+        swipe_refresh.setColorSchemeResources(
+                R.color.colorAccent,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light
+        )
+
+        spinner.adapter = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, AppData.leagues.map { it.name })
+        spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(p0: AdapterView<*>?) { }
+
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                swipe_refresh.isRefreshing = true
+                vmSchedule.getSchedule(schedule, AppData.leagues[position].id)
+            }
+        }
         recycler_view.layoutManager = LinearLayoutManager(ctx)
         recycler_view.setHasFixedSize(true)
 
@@ -67,10 +90,11 @@ class ScheduleFragment : Fragment() {
 
     private fun initVMObserver() {
         vmSchedule.scheduleList.observe(this, Observer {
-            val list = it ?: return@Observer
+            val list = it ?: emptyList()
 
             adapter.update(list)
-            progress.visibility = View.GONE
+
+            swipe_refresh.isRefreshing = false
         })
     }
 

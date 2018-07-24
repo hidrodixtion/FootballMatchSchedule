@@ -20,7 +20,7 @@ import org.jetbrains.anko.db.select
 class ScheduleVM(private val repository: ScheduleRepository, private val teamRepository: TeamRepository, private val db: FavoriteManagedDB) : ViewModel() {
     var scheduleList = MutableLiveData<List<Schedule>>()
 
-    fun getSchedule(scheduleType: ScheduleType) {
+    fun getSchedule(scheduleType: ScheduleType, leagueID: String = "4328") {
         if (AppData.teamData.isEmpty()) {
             launch(UI) {
                 AppData.teamData = teamRepository.getAllTeams()
@@ -30,7 +30,7 @@ class ScheduleVM(private val repository: ScheduleRepository, private val teamRep
         when (scheduleType) {
             ScheduleType.Past, ScheduleType.Next -> {
                 launch(UI) {
-                    scheduleList.value = repository.getSchedules(scheduleType)
+                    scheduleList.value = repository.getSchedules(scheduleType, leagueID)
                 }
             }
             ScheduleType.Favorite -> getFavoriteSchedules()
