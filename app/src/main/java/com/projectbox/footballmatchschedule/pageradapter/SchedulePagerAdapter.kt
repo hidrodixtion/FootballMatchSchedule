@@ -11,8 +11,8 @@ import com.projectbox.footballmatchschedule.view.ScheduleFragment
  */
 class SchedulePagerAdapter(val fm: FragmentManager): FragmentPagerAdapter(fm) {
     val schedules = listOf(
-            ScheduleType.Past,
-            ScheduleType.Next
+            ScheduleType.Next,
+            ScheduleType.Past
     )
 
     override fun getItem(position: Int): Fragment {
@@ -21,10 +21,5 @@ class SchedulePagerAdapter(val fm: FragmentManager): FragmentPagerAdapter(fm) {
 
     override fun getCount(): Int = schedules.size
 
-    override fun getPageTitle(position: Int): CharSequence? {
-        return when (position) {
-            0 -> "Past"
-            else -> "Next"
-        }
-    }
+    override fun getPageTitle(position: Int): CharSequence? = schedules[position].name
 }

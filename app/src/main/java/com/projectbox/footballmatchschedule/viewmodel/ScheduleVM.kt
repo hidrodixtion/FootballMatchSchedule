@@ -5,8 +5,8 @@ import android.arch.lifecycle.ViewModel
 import com.projectbox.footballmatchschedule.model.AppData
 import com.projectbox.footballmatchschedule.model.Schedule
 import com.projectbox.footballmatchschedule.model.ScheduleType
-import com.projectbox.footballmatchschedule.repository.FavoriteManagedDB
-import com.projectbox.footballmatchschedule.repository.FavoriteScheduleColumns
+import com.projectbox.footballmatchschedule.db.FavoriteManagedDB
+import com.projectbox.footballmatchschedule.db.FavoriteScheduleColumns
 import com.projectbox.footballmatchschedule.repository.ScheduleRepository
 import com.projectbox.footballmatchschedule.repository.TeamRepository
 import kotlinx.coroutines.experimental.android.UI

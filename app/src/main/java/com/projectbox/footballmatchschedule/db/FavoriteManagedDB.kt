@@ -1,4 +1,4 @@
-package com.projectbox.footballmatchschedule.repository
+package com.projectbox.footballmatchschedule.db
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase

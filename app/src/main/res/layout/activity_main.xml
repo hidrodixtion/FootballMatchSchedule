@@ -36,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                app:theme="@style/Base.ThemeOverlay.AppCompat.Dark"
+                app:theme="@style/ToolbarTheme"
                 app:layout_scrollFlags="snap|scroll"/>
 
             <android.support.design.widget.TabLayout
@@ -49,6 +49,7 @@
         </android.support.design.widget.AppBarLayout>
 
         <include layout="@layout/content_main" />
+
     </android.support.design.widget.CoordinatorLayout>
 
 </android.support.constraint.ConstraintLayout>

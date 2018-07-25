@@ -16,5 +16,14 @@ data class Team(
         val teamName: String,
 
         @SerializedName("strTeamBadge")
-        val teamBadge: String?
+        val teamBadge: String?,
+
+        val idLeague: String,
+
+        @SerializedName("strDescriptionEN")
+        val teamDescription: String?,
+
+        @SerializedName("intFormedYear")
+        val formedYear: String?
+
 )

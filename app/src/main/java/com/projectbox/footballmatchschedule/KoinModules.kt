@@ -1,7 +1,7 @@
 package com.projectbox.footballmatchschedule
 
 import android.content.Context
-import com.projectbox.footballmatchschedule.repository.FavoriteManagedDB
+import com.projectbox.footballmatchschedule.db.FavoriteManagedDB
 import com.projectbox.footballmatchschedule.repository.ScheduleRepository
 import com.projectbox.footballmatchschedule.repository.TeamRepository
 import com.projectbox.footballmatchschedule.viewmodel.ScheduleDetailVM

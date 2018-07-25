@@ -1,14 +1,8 @@
 package com.projectbox.footballmatchschedule
 
-import android.arch.lifecycle.Observer
-import android.content.Context
-import com.projectbox.footballmatchschedule.model.AppData
-import com.projectbox.footballmatchschedule.model.Schedule
 import com.projectbox.footballmatchschedule.model.ScheduleType
-import com.projectbox.footballmatchschedule.repository.FavoriteManagedDB
 import com.projectbox.footballmatchschedule.repository.ScheduleRepository
 import com.projectbox.footballmatchschedule.repository.TeamRepository
-import com.projectbox.footballmatchschedule.viewmodel.ScheduleVM
 import kotlinx.coroutines.experimental.Unconfined
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.After
@@ -19,8 +13,6 @@ import org.koin.standalone.StandAloneContext.closeKoin
 import org.koin.standalone.StandAloneContext.startKoin
 import org.koin.standalone.inject
 import org.koin.test.KoinTest
-import org.mockito.Mock
-import org.mockito.Mockito.mock
 
 /**
  * Example local unit test, which will execute on the development machine (host).
