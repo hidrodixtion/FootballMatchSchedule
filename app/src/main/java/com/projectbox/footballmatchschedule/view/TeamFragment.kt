@@ -1,5 +1,7 @@
 package com.projectbox.footballmatchschedule.view
 
+
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -10,30 +12,38 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.google.gson.Gson
+
+import com.projectbox.footballmatchschedule.R
+import com.projectbox.footballmatchschedule.adapter.TeamAdapter
+import com.projectbox.footballmatchschedule.model.AppData
+import com.projectbox.footballmatchschedule.viewmodel.TeamVM
 import org.jetbrains.anko.*
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.ctx
-import org.jetbrains.anko.support.v4.onRefresh
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
+import org.koin.android.architecture.ext.viewModel
 
-/**
- * Created by adinugroho
- */
-class TeamFragment : Fragment(), AnkoComponent<Context>, TeamView {
-    lateinit var listTeam: RecyclerView
-    lateinit var progressBar: ProgressBar
+class TeamFragment : Fragment(), AnkoComponent<Context> {
+
+    companion object {
+        fun getInstance(): TeamFragment {
+            return TeamFragment()
+        }
+    }
+
     lateinit var swipeToRefresh: SwipeRefreshLayout
     lateinit var spinner: Spinner
+    lateinit var listTeam: RecyclerView
+    lateinit var progressBar: ProgressBar
 
-    private var teams: MutableList<Team> = mutableListOf()
-    private lateinit var presenter: TeamPresenter
-    private lateinit var adapter: TeamAdapter
-    private lateinit var leagueName: String
+    lateinit var adapter: TeamAdapter
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) = createView(AnkoContext.create(ctx))
+    private val teamVM by viewModel<TeamVM>()
 
-    override fun createView(ui: AnkoContext<Context>) = with(ui) {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?) = createView(AnkoContext.create(ctx))
+
+    override fun createView(ui: AnkoContext<Context>) = with(ui){
         linearLayout {
             lparams(width = matchParent, height = wrapContent)
             orientation = LinearLayout.VERTICAL
@@ -67,48 +77,35 @@ class TeamFragment : Fragment(), AnkoComponent<Context>, TeamView {
         }
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        val spinnerItems = resources.getStringArray(R.array.league)
-        val spinnerAdapter = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, spinnerItems)
-        spinner.adapter = spinnerAdapter
+        progressBar.visibility = View.GONE
+        initObserver()
 
+        spinner.adapter = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, AppData.leagues.map { it.name })
         spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(p0: AdapterView<*>?) { }
 
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                leagueName = spinner.selectedItem.toString()
-                presenter.getTeamList(leagueName)
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                swipeToRefresh.isRefreshing = true
+                adapter.clearItems()
+                teamVM.getTeams(AppData.leagues[position])
             }
         }
 
-        adapter = TeamAdapter(teams) {
-            ctx.startActivity<TeamDetailActivity>("id" to it.idTeam)
-        }
+        adapter = TeamAdapter(teamVM.teamList.value ?: emptyList())
         listTeam.adapter = adapter
 
-        val request = ApiRepository()
-        val gson = Gson()
-        presenter = TeamPresenter(this, request, gson)
-
-        swipeToRefresh.onRefresh {
-            presenter.getTeamList(leagueName)
-        }
+        teamVM.getTeams(AppData.leagues.first())
     }
 
-    override fun showLoading() {
-        progressBar.visible()
-    }
-
-    override fun hideLoading() {
-        progressBar.invisible()
-    }
-
-    override fun showTeamList(data: List<Team>) {
-        swipeToRefresh.isRefreshing = false
-        teams.clear()
-        teams.addAll(data)
-        adapter.notifyDataSetChanged()
+    private fun initObserver() {
+        teamVM.teamList.observe(this, Observer {
+            it?.let {
+                adapter.updateTeams(it)
+                swipeToRefresh.isRefreshing = false
+            }
+        })
     }
 }

@@ -3,9 +3,9 @@ package com.projectbox.footballmatchschedule.viewmodel
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.database.sqlite.SQLiteConstraintException
-import com.projectbox.footballmatchschedule.model.Schedule
-import com.projectbox.footballmatchschedule.db.FavoriteManagedDB
 import com.projectbox.footballmatchschedule.db.FavoriteScheduleColumns
+import com.projectbox.footballmatchschedule.db.ManagedDB
+import com.projectbox.footballmatchschedule.model.Schedule
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.delete
 import org.jetbrains.anko.db.insert
@@ -14,7 +14,7 @@ import org.jetbrains.anko.db.select
 /**
  * Created by adinugroho
  */
-class ScheduleDetailVM(private val db: FavoriteManagedDB) : ViewModel() {
+class ScheduleDetailVM(private val db: ManagedDB) : ViewModel() {
     var isFavoriteSchedule = MutableLiveData<Boolean>()
     var message = MutableLiveData<String>()
 

@@ -2,45 +2,44 @@ package com.projectbox.footballmatchschedule.viewmodel
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.projectbox.footballmatchschedule.model.AppData
-import com.projectbox.footballmatchschedule.model.Schedule
-import com.projectbox.footballmatchschedule.model.ScheduleType
-import com.projectbox.footballmatchschedule.db.FavoriteManagedDB
-import com.projectbox.footballmatchschedule.db.FavoriteScheduleColumns
+import android.database.sqlite.SQLiteConstraintException
+import com.projectbox.footballmatchschedule.db.*
+import com.projectbox.footballmatchschedule.model.*
 import com.projectbox.footballmatchschedule.repository.ScheduleRepository
 import com.projectbox.footballmatchschedule.repository.TeamRepository
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.db.classParser
+import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
+import timber.log.Timber
 
 /**
  * Created by adinugroho
  */
-class ScheduleVM(private val repository: ScheduleRepository, private val teamRepository: TeamRepository, private val db: FavoriteManagedDB) : ViewModel() {
+class ScheduleVM(private val repository: ScheduleRepository, private val teamRepository: TeamRepository) : ViewModel() {
     var scheduleList = MutableLiveData<List<Schedule>>()
 
-    fun getSchedule(scheduleType: ScheduleType, leagueID: String = "4328") {
-        if (AppData.teamData.isEmpty()) {
+    fun getSchedule(scheduleType: ScheduleType, league: League) {
+        Timber.v("GET SCHEDULE")
+        if (teamRepository.getTeamFromDB(league).isEmpty()) {
             launch(UI) {
-                AppData.teamData = teamRepository.getAllTeams()
+                val teams = teamRepository.getAllTeams(league.name)
+                teamRepository.insertTeamsToDB(teams)
             }
         }
 
         when (scheduleType) {
             ScheduleType.Past, ScheduleType.Next -> {
                 launch(UI) {
-                    scheduleList.value = repository.getSchedules(scheduleType, leagueID)
+                    scheduleList.value = repository.getSchedules(scheduleType, league.id)
                 }
             }
-            ScheduleType.Favorite -> getFavoriteSchedules()
-        }
-    }
-
-    private fun getFavoriteSchedules() {
-        db.use {
-            val result = select(FavoriteScheduleColumns.TABLE_NAME)
-            scheduleList.value = result.parseList(classParser())
+            ScheduleType.Favorite -> {
+                repository.getFavoriteSchedules()?.let {
+                    scheduleList.value = it
+                }
+            }
         }
     }
 }

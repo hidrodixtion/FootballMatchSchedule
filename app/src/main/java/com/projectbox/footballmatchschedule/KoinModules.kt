@@ -1,11 +1,12 @@
 package com.projectbox.footballmatchschedule
 
 import android.content.Context
-import com.projectbox.footballmatchschedule.db.FavoriteManagedDB
+import com.projectbox.footballmatchschedule.db.ManagedDB
 import com.projectbox.footballmatchschedule.repository.ScheduleRepository
 import com.projectbox.footballmatchschedule.repository.TeamRepository
 import com.projectbox.footballmatchschedule.viewmodel.ScheduleDetailVM
 import com.projectbox.footballmatchschedule.viewmodel.ScheduleVM
+import com.projectbox.footballmatchschedule.viewmodel.TeamVM
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.architecture.ext.viewModel
@@ -23,18 +24,18 @@ class KoinModules {
         const val URL = "SERVER_URL"
     }
 
-
     fun getModules() = applicationContext {
         bean { createInterceptor() }
 //            bean { createService(get(), getProperty(URL)) }
         bean { createService(get()) }
-        bean { favScheduleDB(get()) }
+        bean { createManagedDB(get()) }
 
-        factory { ScheduleRepository(get()) }
-        factory { TeamRepository(get()) }
+        factory { ScheduleRepository(get(), get()) }
+        factory { TeamRepository(get(), get()) }
 
-        viewModel { ScheduleVM(get(), get(), get()) }
+        viewModel { ScheduleVM(get(), get()) }
         viewModel { ScheduleDetailVM(get()) }
+        viewModel { TeamVM(get()) }
     }
 
     private fun createInterceptor(): OkHttpClient {
@@ -57,7 +58,7 @@ class KoinModules {
         return retrofit.create(IService::class.java)
     }
 
-    private fun favScheduleDB(context: Context): FavoriteManagedDB {
-        return FavoriteManagedDB(context)
+    private fun createManagedDB(context: Context): ManagedDB {
+        return ManagedDB(context)
     }
 }

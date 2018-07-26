@@ -7,7 +7,7 @@ import org.jetbrains.anko.db.*
 /**
  * Created by adinugroho
  */
-class FavoriteManagedDB(context: Context) : ManagedSQLiteOpenHelper(context, "FavoriteEvent.db", null, 1) {
+class ManagedDB(context: Context) : ManagedSQLiteOpenHelper(context, "App.db", null, 1) {
 
     override fun onCreate(db: SQLiteDatabase) {
         db.createTable(FavoriteScheduleColumns.TABLE_NAME, true,
@@ -32,10 +32,21 @@ class FavoriteManagedDB(context: Context) : ManagedSQLiteOpenHelper(context, "Fa
                 FavoriteScheduleColumns.C_AWAY_FW to TEXT,
                 FavoriteScheduleColumns.C_DATE to TEXT
         )
+
+        db.createTable(TeamColumns.TABLE_NAME, true,
+                TeamColumns.C_ID to TEXT + UNIQUE + PRIMARY_KEY,
+                TeamColumns.C_NAME to TEXT,
+                TeamColumns.C_BADGE to TEXT,
+                TeamColumns.C_LEAGUE to TEXT,
+                TeamColumns.C_DESC to TEXT,
+                TeamColumns.C_YEAR to TEXT,
+                TeamColumns.C_FAV to INTEGER
+        )
     }
 
     override fun onUpgrade(db: SQLiteDatabase, p1: Int, p2: Int) {
         db.dropTable(FavoriteScheduleColumns.TABLE_NAME, true)
+        db.dropTable(TeamColumns.TABLE_NAME, true)
     }
 }
 
@@ -62,4 +73,16 @@ object FavoriteScheduleColumns {
     const val C_AWAY_DEF = "away_def"
     const val C_AWAY_MID = "away_mid"
     const val C_AWAY_FW = "away_fw"
+}
+
+object TeamColumns {
+    const val TABLE_NAME = "table_team"
+
+    const val C_ID = "team_id"
+    const val C_NAME = "team_name"
+    const val C_BADGE = "team_badge"
+    const val C_LEAGUE = "league_id"
+    const val C_DESC = "team_description"
+    const val C_YEAR = "team_formed_year"
+    const val C_FAV = "is_favorited"
 }

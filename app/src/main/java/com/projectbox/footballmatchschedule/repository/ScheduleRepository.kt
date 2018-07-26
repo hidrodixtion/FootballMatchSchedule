@@ -1,8 +1,13 @@
 package com.projectbox.footballmatchschedule.repository
 
 import com.projectbox.footballmatchschedule.IService
+import com.projectbox.footballmatchschedule.db.FavoriteScheduleColumns
+import com.projectbox.footballmatchschedule.db.ManagedDB
 import com.projectbox.footballmatchschedule.model.Schedule
 import com.projectbox.footballmatchschedule.model.ScheduleType
+import org.jetbrains.anko.db.SelectQueryBuilder
+import org.jetbrains.anko.db.classParser
+import org.jetbrains.anko.db.select
 import retrofit2.HttpException
 import ru.gildor.coroutines.retrofit.await
 import timber.log.Timber
@@ -10,7 +15,7 @@ import timber.log.Timber
 /**
  * Created by adinugroho
  */
-class ScheduleRepository(private val service: IService) {
+class ScheduleRepository(private val service: IService, private val db: ManagedDB) {
     suspend fun getSchedules(scheduleType: ScheduleType, leagueID: String): List<Schedule> {
         val request = when (scheduleType) {
             ScheduleType.Past -> service.getPastLeague(leagueID)
@@ -28,5 +33,15 @@ class ScheduleRepository(private val service: IService) {
         }
 
         return emptyList()
+    }
+
+    fun getFavoriteSchedules(): List<Schedule>? {
+        var result: SelectQueryBuilder? = null
+
+        db.use {
+            result = select(FavoriteScheduleColumns.TABLE_NAME)
+        }
+
+        return result?.parseList(classParser())
     }
 }

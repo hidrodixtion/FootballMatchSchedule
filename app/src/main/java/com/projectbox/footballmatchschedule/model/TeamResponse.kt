@@ -24,6 +24,8 @@ data class Team(
         val teamDescription: String?,
 
         @SerializedName("intFormedYear")
-        val formedYear: String?
+        val formedYear: String?,
+
+        var isFavorited: Int = 0
 
 )

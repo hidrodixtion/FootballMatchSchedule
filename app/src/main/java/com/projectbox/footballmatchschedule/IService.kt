@@ -19,6 +19,6 @@ interface IService {
     @GET("eventsnextleague.php")
     fun getNextLeague(@Query("id") leagueID: String = "4328"): Call<ScheduleResponse>//Observable<ScheduleResponse>
 
-    @GET("search_all_teams.php?l=English Premier League")
-    fun getAllTeams(): Call<TeamResponse>//Observable<TeamResponse>
+    @GET("search_all_teams.php")
+    fun getAllTeams(@Query("l") leagueName: String): Call<TeamResponse>//Observable<TeamResponse>
 }

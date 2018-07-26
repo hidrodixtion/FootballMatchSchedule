@@ -44,26 +44,19 @@ class ScheduleFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_schedule, container, false)
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
 
         initUI()
         initVMObserver()
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
-
     private fun initUI() {
         val args = arguments ?: return
         val schedule = ScheduleType.valueOf(args.getString(EXT_SCHEDULE))
-
-        vmSchedule.getSchedule(schedule)
 
         swipe_refresh.setColorSchemeResources(
                 R.color.colorAccent,
@@ -78,7 +71,7 @@ class ScheduleFragment : Fragment() {
 
             override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
                 swipe_refresh.isRefreshing = true
-                vmSchedule.getSchedule(schedule, AppData.leagues[position].id)
+                vmSchedule.getSchedule(schedule, AppData.leagues[position])
             }
         }
         recycler_view.layoutManager = LinearLayoutManager(ctx)
