@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.DetailActivity" />
+        <activity android:name=".view.ScheduleDetailActivity" />
         <activity android:name=".view.SearchScheduleActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH"/>

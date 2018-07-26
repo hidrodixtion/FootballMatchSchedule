@@ -65,13 +65,18 @@ class ScheduleFragment : Fragment() {
                 android.R.color.holo_red_light
         )
 
-        spinner.adapter = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, AppData.leagues.map { it.name })
-        spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(p0: AdapterView<*>?) { }
+        if (schedule == ScheduleType.Favorite) {
+            spinner.visibility = View.GONE
+            vmSchedule.getSchedule(schedule)
+        } else {
+            spinner.adapter = ArrayAdapter(ctx, android.R.layout.simple_spinner_dropdown_item, AppData.leagues.map { it.name })
+            spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(p0: AdapterView<*>?) {}
 
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
-                swipe_refresh.isRefreshing = true
-                vmSchedule.getSchedule(schedule, AppData.leagues[position])
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, position: Int, p3: Long) {
+                    swipe_refresh.isRefreshing = true
+                    vmSchedule.getSchedule(schedule, AppData.leagues[position])
+                }
             }
         }
         recycler_view.layoutManager = LinearLayoutManager(ctx)

@@ -17,7 +17,7 @@ import org.jetbrains.anko.ctx
 import org.jetbrains.anko.design.snackbar
 import org.koin.android.architecture.ext.viewModel
 
-class DetailActivity : AppCompatActivity() {
+class ScheduleDetailActivity : AppCompatActivity() {
 
     companion object {
         const val EXT_SCHEDULE = "schedule"

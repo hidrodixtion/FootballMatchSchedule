@@ -20,19 +20,23 @@ import timber.log.Timber
 class ScheduleVM(private val repository: ScheduleRepository, private val teamRepository: TeamRepository) : ViewModel() {
     var scheduleList = MutableLiveData<List<Schedule>>()
 
-    fun getSchedule(scheduleType: ScheduleType, league: League) {
+    fun getSchedule(scheduleType: ScheduleType, league: League? = null) {
         Timber.v("GET SCHEDULE")
-        if (teamRepository.getTeamFromDB(league).isEmpty()) {
-            launch(UI) {
-                val teams = teamRepository.getAllTeams(league.name)
-                teamRepository.insertTeamsToDB(teams)
+        if (league != null) {
+            if (teamRepository.getTeamFromDB(league).isEmpty()) {
+                launch(UI) {
+                    val teams = teamRepository.getAllTeams(league.name)
+                    teamRepository.insertTeamsToDB(teams)
+                }
             }
         }
 
         when (scheduleType) {
             ScheduleType.Past, ScheduleType.Next -> {
                 launch(UI) {
-                    scheduleList.value = repository.getSchedules(scheduleType, league.id)
+                    if (league != null) {
+                        scheduleList.value = repository.getSchedules(scheduleType, league.id)
+                    }
                 }
             }
             ScheduleType.Favorite -> {

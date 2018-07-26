@@ -36,12 +36,13 @@ class ScheduleRepository(private val service: IService, private val db: ManagedD
     }
 
     fun getFavoriteSchedules(): List<Schedule>? {
-        var result: SelectQueryBuilder? = null
+        var list: List<Schedule> = emptyList()
 
         db.use {
-            result = select(FavoriteScheduleColumns.TABLE_NAME)
+            val result = select(FavoriteScheduleColumns.TABLE_NAME)
+            list = result.parseList(classParser())
         }
 
-        return result?.parseList(classParser())
+        return list
     }
 }

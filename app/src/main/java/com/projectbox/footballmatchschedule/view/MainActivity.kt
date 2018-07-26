@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import com.projectbox.footballmatchschedule.R
 import com.projectbox.footballmatchschedule.event.ScheduleClickEvent
+import com.projectbox.footballmatchschedule.pageradapter.FavoritePagerAdapter
 import com.projectbox.footballmatchschedule.pageradapter.SchedulePagerAdapter
 import com.projectbox.footballmatchschedule.pageradapter.TeamPagerAdapter
 import kotlinx.android.synthetic.main.activity_main.*
@@ -19,12 +20,11 @@ import org.jetbrains.anko.startActivity
 
 class MainActivity : AppCompatActivity() {
 
+    lateinit var menuSearch: MenuItem
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        bottom_navbar.setOnNavigationItemSelectedListener(onNavigationItemSelected)
-        bottom_navbar.selectedItemId = R.id.menu_schedule
 
         initUI()
     }
@@ -41,6 +41,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
+        menuSearch = menu!!.findItem(R.id.action_search)
+
+        bottom_navbar.setOnNavigationItemSelectedListener(onNavigationItemSelected)
+        bottom_navbar.selectedItemId = R.id.menu_schedule
+
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -54,15 +59,18 @@ class MainActivity : AppCompatActivity() {
     private val onNavigationItemSelected = BottomNavigationView.OnNavigationItemSelectedListener {
         return@OnNavigationItemSelectedListener when(it.itemId) {
             R.id.menu_schedule -> {
+                menuSearch.isVisible = true
                 openViewPager(SchedulePagerAdapter(supportFragmentManager))
                 true
             }
             R.id.menu_team -> {
+                menuSearch.isVisible = true
                 openViewPager(TeamPagerAdapter(supportFragmentManager))
                 true
             }
             R.id.menu_favorite -> {
-//                currentSchedule = ScheduleType.Favorite
+                menuSearch.isVisible = false
+                openViewPager(FavoritePagerAdapter(supportFragmentManager))
                 true
             }
             else -> false
@@ -96,7 +104,6 @@ class MainActivity : AppCompatActivity() {
 
     @Subscribe
     fun onScheduleClickEvent(e: ScheduleClickEvent) {
-        startActivity<DetailActivity>(DetailActivity.EXT_SCHEDULE to e.schedule)
-//        startActivity<SearchScheduleActivity>()
+        startActivity<ScheduleDetailActivity>(ScheduleDetailActivity.EXT_SCHEDULE to e.schedule)
     }
 }
