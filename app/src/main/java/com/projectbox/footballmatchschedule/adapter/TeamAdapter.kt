@@ -4,8 +4,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.projectbox.footballmatchschedule.R
+import com.projectbox.footballmatchschedule.event.TeamClickEvent
 import com.projectbox.footballmatchschedule.model.Team
 import com.projectbox.footballmatchschedule.viewholder.TeamItemVH
+import org.greenrobot.eventbus.EventBus
 
 /**
  * Created by adinugroho
@@ -20,6 +22,9 @@ class TeamAdapter(private var teams: List<Team>) : RecyclerView.Adapter<TeamItem
 
     override fun onBindViewHolder(holder: TeamItemVH, position: Int) {
         holder.bind(teams[position])
+        holder.containerView.setOnClickListener {
+            EventBus.getDefault().post(TeamClickEvent(teams[position]))
+        }
     }
 
     fun updateTeams(teams: List<Team>) {

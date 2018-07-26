@@ -4,8 +4,6 @@ package com.projectbox.footballmatchschedule.model
  * Created by adinugroho
  */
 object AppData {
-    var teamData = listOf<Team>()
-
     val leagues = listOf<League>(
             League("English Premier League", "4328"),
             League("Spanish La Liga", "4335"),

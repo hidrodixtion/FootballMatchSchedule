@@ -9,6 +9,7 @@ import android.view.MenuItem
 import android.view.View
 import com.projectbox.footballmatchschedule.R
 import com.projectbox.footballmatchschedule.event.ScheduleClickEvent
+import com.projectbox.footballmatchschedule.event.TeamClickEvent
 import com.projectbox.footballmatchschedule.pageradapter.FavoritePagerAdapter
 import com.projectbox.footballmatchschedule.pageradapter.SchedulePagerAdapter
 import com.projectbox.footballmatchschedule.pageradapter.TeamPagerAdapter
@@ -105,5 +106,10 @@ class MainActivity : AppCompatActivity() {
     @Subscribe
     fun onScheduleClickEvent(e: ScheduleClickEvent) {
         startActivity<ScheduleDetailActivity>(ScheduleDetailActivity.EXT_SCHEDULE to e.schedule)
+    }
+
+    @Subscribe
+    fun onTeamClickEvent(e: TeamClickEvent) {
+        startActivity<TeamDetailActivity>()
     }
 }

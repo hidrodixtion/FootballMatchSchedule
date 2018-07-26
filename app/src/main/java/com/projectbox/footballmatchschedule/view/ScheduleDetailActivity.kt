@@ -64,6 +64,7 @@ class ScheduleDetailActivity : AppCompatActivity() {
     }
 
     private fun initUI() {
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         supportActionBar?.title = "Event Detail"
@@ -75,15 +76,15 @@ class ScheduleDetailActivity : AppCompatActivity() {
 
         schedule = intent.getParcelableExtra(EXT_SCHEDULE)
 
-        val homeBadge = AppData.teamData.firstOrNull { it.idTeam == schedule.homeID }
-        if (homeBadge != null) {
-            Glide.with(this).load(homeBadge.teamBadge).into(img_home)
-        }
-
-        val awayBadge = AppData.teamData.firstOrNull { it.idTeam == schedule.awayID }
-        if (awayBadge != null) {
-            Glide.with(this).load(awayBadge.teamBadge).into(img_away)
-        }
+//        val homeBadge = AppData.teamData.firstOrNull { it.idTeam == schedule.homeID }
+//        if (homeBadge != null) {
+//            Glide.with(this).load(homeBadge.teamBadge).into(img_home)
+//        }
+//
+//        val awayBadge = AppData.teamData.firstOrNull { it.idTeam == schedule.awayID }
+//        if (awayBadge != null) {
+//            Glide.with(this).load(awayBadge.teamBadge).into(img_away)
+//        }
 
         txt_date.text = DateConverter.convertFromScheduleDate(schedule.date)
         txt_home.text = schedule.homeTeam
