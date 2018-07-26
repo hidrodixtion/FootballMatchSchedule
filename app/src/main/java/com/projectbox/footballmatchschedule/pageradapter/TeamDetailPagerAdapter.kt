@@ -9,7 +9,7 @@ import com.projectbox.footballmatchschedule.view.TeamPlayersFragment
 /**
  * Created by adinugroho
  */
-class TeamDetailPagerAdapter(val fm: FragmentManager): FragmentPagerAdapter(fm) {
+class TeamDetailPagerAdapter(fm: FragmentManager, val leagueID: String): FragmentPagerAdapter(fm) {
     val list = listOf(
             "Overview",
             "Players"
@@ -17,7 +17,7 @@ class TeamDetailPagerAdapter(val fm: FragmentManager): FragmentPagerAdapter(fm) 
 
     override fun getItem(position: Int): Fragment {
         return when (position) {
-            0 -> TeamInfoFragment.getInstance()
+            0 -> TeamInfoFragment.getInstance(leagueID)
             else -> TeamPlayersFragment.getInstance()
         }
     }

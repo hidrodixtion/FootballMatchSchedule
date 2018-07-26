@@ -64,4 +64,15 @@ class TeamRepository(private val service: IService, private val db: ManagedDB) {
             }
         }
     }
+
+    fun getTeamFromID(teamID: String): Team {
+        var teams = listOf<Team>()
+
+        db.use {
+            val result = select(TeamColumns.TABLE_NAME).whereArgs("${TeamColumns.C_ID} = {team_id}", "team_id" to teamID)
+            teams = result.parseList(classParser())
+        }
+
+        return teams.first()
+    }
 }

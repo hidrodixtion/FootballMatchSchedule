@@ -20,7 +20,8 @@
             <android.support.design.widget.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/collapsing_toolbar">
+                android:id="@+id/collapsing_toolbar"
+                app:layout_scrollFlags="snap|scroll">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -37,18 +38,20 @@
                         tools:src="@drawable/ic_added_to_favorites"/>
 
                     <TextView
+                        android:id="@+id/txt_team"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Barcelona"
+                        tools:text="Barcelona"
                         android:textColor="@android:color/white"
                         android:textSize="16sp"
                         android:layout_marginBottom="8dp"/>
 
                     <TextView
+                        android:id="@+id/txt_year"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@android:color/white"
-                        android:text="1978"/>
+                        tools:text="1978"/>
                 </LinearLayout>
 
                 <android.support.v7.widget.Toolbar

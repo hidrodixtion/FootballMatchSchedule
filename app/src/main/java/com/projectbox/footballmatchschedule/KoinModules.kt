@@ -6,6 +6,7 @@ import com.projectbox.footballmatchschedule.repository.ScheduleRepository
 import com.projectbox.footballmatchschedule.repository.TeamRepository
 import com.projectbox.footballmatchschedule.viewmodel.ScheduleDetailVM
 import com.projectbox.footballmatchschedule.viewmodel.ScheduleVM
+import com.projectbox.footballmatchschedule.viewmodel.TeamInfoVM
 import com.projectbox.footballmatchschedule.viewmodel.TeamVM
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -36,6 +37,7 @@ class KoinModules {
         viewModel { ScheduleVM(get(), get()) }
         viewModel { ScheduleDetailVM(get()) }
         viewModel { TeamVM(get()) }
+        viewModel { TeamInfoVM(get()) }
     }
 
     private fun createInterceptor(): OkHttpClient {
