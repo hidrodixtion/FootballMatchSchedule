@@ -10,6 +10,7 @@ import com.projectbox.footballmatchschedule.model.response.Team
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
+import org.jetbrains.anko.db.update
 import retrofit2.HttpException
 import ru.gildor.coroutines.retrofit.await
 import timber.log.Timber
@@ -84,5 +85,22 @@ class TeamRepository(private val service: IService, private val db: ManagedDB) {
         }
 
         return emptyList()
+    }
+
+    fun toggleFavorite(id: String, isFavorite: Boolean): Boolean {
+        var newVal = 0
+        if (isFavorite)
+            newVal = 1
+
+        try {
+            db.use {
+                update(TeamColumns.TABLE_NAME, TeamColumns.C_FAV to newVal).whereArgs("${TeamColumns.C_ID} = {team_id}", "team_id" to id).exec()
+//                Timber.v(isFavorite.toString())
+            }
+        } catch (e: SQLiteConstraintException) {
+            Timber.e(e.localizedMessage)
+        }
+
+        return isFavorite
     }
 }

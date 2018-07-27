@@ -3,6 +3,9 @@ package com.projectbox.footballmatchschedule.view
 import android.arch.lifecycle.Observer
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.view.Menu
+import android.view.MenuItem
 import com.bumptech.glide.Glide
 import com.projectbox.footballmatchschedule.R
 import com.projectbox.footballmatchschedule.event.PlayerClickEvent
@@ -12,6 +15,8 @@ import kotlinx.android.synthetic.main.activity_team_detail.*
 import kotlinx.android.synthetic.main.content_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
+import org.jetbrains.anko.ctx
+import org.jetbrains.anko.design.snackbar
 import org.jetbrains.anko.startActivity
 import org.koin.android.architecture.ext.viewModel
 
@@ -21,19 +26,43 @@ class TeamDetailActivity : AppCompatActivity() {
         const val Ext_Team_ID = "team_id"
     }
 
-    val teamInfoVM: TeamInfoVM by viewModel()
+    private val teamInfoVM: TeamInfoVM by viewModel()
+
+    lateinit var menuItem: MenuItem
+    var isFavorite = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_team_detail)
 
         initUI()
-        initObserver()
     }
 
-    override fun onSupportNavigateUp(): Boolean {
-        finish()
-        return super.onSupportNavigateUp()
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.detail_menu, menu)
+        return true
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        val menu = menu ?: return false
+        menuItem = menu.findItem(R.id.add_to_favorite)
+
+        initObserver()
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            R.id.add_to_favorite -> {
+                toggleFavorite()
+                true
+            }
+            else -> false
+        }
     }
 
     override fun onStart() {
@@ -68,7 +97,29 @@ class TeamDetailActivity : AppCompatActivity() {
             }
         })
 
+        teamInfoVM.isFavoriteTeam.observe(this, Observer {
+            it?.let {
+                isFavorite = it
+
+                if (isFavorite) {
+                    menuItem.icon = ContextCompat.getDrawable(ctx, R.drawable.ic_added_to_favorites)
+                } else {
+                    menuItem.icon = ContextCompat.getDrawable(ctx, R.drawable.ic_add_to_favorites)
+                }
+            }
+        })
+
+        teamInfoVM.message.observe(this, Observer {
+            it?.let {
+                snackbar(toolbar, it).show()
+            }
+        })
+
         teamInfoVM.getTeamFromID(intent.getStringExtra(Ext_Team_ID))
+    }
+
+    private fun toggleFavorite() {
+        teamInfoVM.toggleFavorite()
     }
 
     @Subscribe
