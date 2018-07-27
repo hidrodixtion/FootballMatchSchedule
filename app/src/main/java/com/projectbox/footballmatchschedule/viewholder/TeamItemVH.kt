@@ -16,9 +16,4 @@ class TeamItemVH(override val containerView: View): RecyclerView.ViewHolder(cont
         Glide.with(containerView).load(item.teamBadge).into(img_badge)
         txt_name.text = item.teamName
     }
-
-    fun bind(player: Player) {
-        Glide.with(containerView).load(player.photo).into(img_badge)
-        txt_name.text = player.name
-    }
 }

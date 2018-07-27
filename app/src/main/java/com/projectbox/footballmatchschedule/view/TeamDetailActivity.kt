@@ -5,10 +5,14 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.bumptech.glide.Glide
 import com.projectbox.footballmatchschedule.R
+import com.projectbox.footballmatchschedule.event.PlayerClickEvent
 import com.projectbox.footballmatchschedule.pageradapter.TeamDetailPagerAdapter
 import com.projectbox.footballmatchschedule.viewmodel.TeamInfoVM
 import kotlinx.android.synthetic.main.activity_team_detail.*
 import kotlinx.android.synthetic.main.content_main.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.jetbrains.anko.startActivity
 import org.koin.android.architecture.ext.viewModel
 
 class TeamDetailActivity : AppCompatActivity() {
@@ -30,6 +34,16 @@ class TeamDetailActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         finish()
         return super.onSupportNavigateUp()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
+    override fun onStop() {
+        EventBus.getDefault().unregister(this)
+        super.onStop()
     }
 
     private fun initUI() {
@@ -55,5 +69,14 @@ class TeamDetailActivity : AppCompatActivity() {
         })
 
         teamInfoVM.getTeamFromID(intent.getStringExtra(Ext_Team_ID))
+    }
+
+    @Subscribe
+    fun onPlayerClicked(e: PlayerClickEvent) {
+        startActivity<PlayerDetailActivity>(
+                PlayerDetailActivity.Ext_Name to e.player.name,
+                PlayerDetailActivity.Ext_Description to e.player.description,
+                PlayerDetailActivity.Ext_Image to e.player.fanart
+        )
     }
 }
