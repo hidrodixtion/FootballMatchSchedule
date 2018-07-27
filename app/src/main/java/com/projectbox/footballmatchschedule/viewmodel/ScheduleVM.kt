@@ -42,4 +42,11 @@ class ScheduleVM(private val repository: ScheduleRepository, private val teamRep
             }
         }
     }
+
+    fun searchSchedule(query: String) {
+        launch(UI) {
+            val result = repository.searchSchedule(query)
+            scheduleList.value = result
+        }
+    }
 }

@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".view.ScheduleDetailActivity" />
-        <activity android:name=".view.SearchScheduleActivity">
+        <activity android:name=".view.SearchActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>

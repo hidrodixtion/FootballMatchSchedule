@@ -10,7 +10,7 @@ object DateConverter {
     fun convertFromScheduleDate(date: String?): String {
         val date = date ?: return "TBD"
 
-        val sdfConvert = SimpleDateFormat("dd/MM/yy", Locale.ENGLISH)
+        val sdfConvert = SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH)
         val convertedDate = sdfConvert.parse(date)
 
         val sdfFormat = SimpleDateFormat("EEE, dd MMM yyyy", Locale.ENGLISH)

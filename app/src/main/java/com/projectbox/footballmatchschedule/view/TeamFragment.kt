@@ -26,8 +26,14 @@ import org.koin.android.architecture.ext.viewModel
 class TeamFragment : Fragment(), AnkoComponent<Context> {
 
     companion object {
-        fun getInstance(): TeamFragment {
-            return TeamFragment()
+        const val Ext_Show_Favorite = "show_favorite"
+
+        fun getInstance(showFavorite: Boolean = false): TeamFragment {
+            val bundle = Bundle()
+            bundle.putBoolean(Ext_Show_Favorite, showFavorite)
+            val fragment = TeamFragment()
+            fragment.arguments = bundle
+            return fragment
         }
     }
 
@@ -80,6 +86,8 @@ class TeamFragment : Fragment(), AnkoComponent<Context> {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val args = arguments ?: return
+
         progressBar.visibility = View.GONE
         initObserver()
 
@@ -97,7 +105,20 @@ class TeamFragment : Fragment(), AnkoComponent<Context> {
         adapter = TeamAdapter(teamVM.teamList.value ?: emptyList())
         listTeam.adapter = adapter
 
-        teamVM.getTeams(AppData.leagues.first())
+        if (args.getBoolean(Ext_Show_Favorite)) {
+            teamVM.getFavoriteTeams()
+            spinner.visibility = View.GONE
+        } else
+            teamVM.getTeams(AppData.leagues.first())
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val args = arguments ?: return
+        if (args.getBoolean(Ext_Show_Favorite)) {
+            teamVM.getFavoriteTeams()
+        }
     }
 
     private fun initObserver() {

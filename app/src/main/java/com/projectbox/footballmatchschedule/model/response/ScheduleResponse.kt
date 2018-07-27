@@ -71,6 +71,12 @@ data class Schedule(
         @SerializedName("strAwayLineupForward")
         val awayFW: String?,
 
-        @SerializedName("strDate")
-        val date: String?
+        @SerializedName("dateEvent")
+        val date: String?,
+
+        @SerializedName("strTime")
+        val time: String?,
+
+        @SerializedName("strSport")
+        val sport: String
 ) : Parcelable

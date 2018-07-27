@@ -21,6 +21,8 @@ import org.jetbrains.anko.startActivity
 
 class MainActivity : AppCompatActivity() {
 
+    private var currentMenu = SearchActivity.SearchType.Schedule
+
     lateinit var menuSearch: MenuItem
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,7 +54,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
-            R.id.action_search -> startActivity<SearchScheduleActivity>()
+            R.id.action_search -> {
+                startActivity<SearchActivity>(SearchActivity.Ext_Type to currentMenu.name)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -62,11 +66,13 @@ class MainActivity : AppCompatActivity() {
             R.id.menu_schedule -> {
                 menuSearch.isVisible = true
                 openViewPager(SchedulePagerAdapter(supportFragmentManager))
+                currentMenu = SearchActivity.SearchType.Schedule
                 true
             }
             R.id.menu_team -> {
                 menuSearch.isVisible = true
                 openViewPager(TeamPagerAdapter(supportFragmentManager))
+                currentMenu = SearchActivity.SearchType.Team
                 true
             }
             R.id.menu_favorite -> {

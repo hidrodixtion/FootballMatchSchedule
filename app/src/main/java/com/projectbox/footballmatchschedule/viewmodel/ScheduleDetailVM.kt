@@ -50,7 +50,9 @@ class ScheduleDetailVM(private val db: ManagedDB) : ViewModel() {
                         FavoriteScheduleColumns.C_AWAY_DEF to schedule.awayDef,
                         FavoriteScheduleColumns.C_AWAY_MID to schedule.awayMid,
                         FavoriteScheduleColumns.C_AWAY_FW to schedule.awayFW,
-                        FavoriteScheduleColumns.C_DATE to schedule.date
+                        FavoriteScheduleColumns.C_DATE to schedule.date,
+                        FavoriteScheduleColumns.C_TIME to schedule.time,
+                        FavoriteScheduleColumns.C_SPORT to "soccer"
                 )
 
                 isFavoriteSchedule.value = true

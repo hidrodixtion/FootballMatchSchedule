@@ -30,7 +30,9 @@ class ManagedDB(context: Context) : ManagedSQLiteOpenHelper(context, "App.db", n
                 FavoriteScheduleColumns.C_AWAY_DEF to TEXT,
                 FavoriteScheduleColumns.C_AWAY_MID to TEXT,
                 FavoriteScheduleColumns.C_AWAY_FW to TEXT,
-                FavoriteScheduleColumns.C_DATE to TEXT
+                FavoriteScheduleColumns.C_DATE to TEXT,
+                FavoriteScheduleColumns.C_TIME to TEXT,
+                FavoriteScheduleColumns.C_SPORT to TEXT
         )
 
         db.createTable(TeamColumns.TABLE_NAME, true,
@@ -73,6 +75,8 @@ object FavoriteScheduleColumns {
     const val C_AWAY_DEF = "away_def"
     const val C_AWAY_MID = "away_mid"
     const val C_AWAY_FW = "away_fw"
+    const val C_TIME = "time"
+    const val C_SPORT = "sport"
 }
 
 object TeamColumns {

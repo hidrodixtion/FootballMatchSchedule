@@ -7,6 +7,8 @@ import com.projectbox.footballmatchschedule.db.TeamColumns
 import com.projectbox.footballmatchschedule.model.League
 import com.projectbox.footballmatchschedule.model.response.Player
 import com.projectbox.footballmatchschedule.model.response.Team
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
@@ -63,15 +65,28 @@ class TeamRepository(private val service: IService, private val db: ManagedDB) {
         }
     }
 
-    fun getTeamFromID(teamID: String): Team {
-        var teams = listOf<Team>()
+    fun getTeamFromID(teamID: String): Team? {
+        var teams = emptyList<Team>()
 
         db.use {
             val result = select(TeamColumns.TABLE_NAME).whereArgs("${TeamColumns.C_ID} = {team_id}", "team_id" to teamID)
             teams = result.parseList(classParser())
         }
 
-        return teams.first()
+        return teams.firstOrNull()
+    }
+
+    suspend fun getTeamFromAPI(teamID: String): List<Team> {
+        try {
+            val teamResponse = service.getTeam(teamID).await()
+            return teamResponse.teams
+        } catch (e: HttpException) {
+            Timber.e("Error ${e.code()} : ${e.localizedMessage}")
+        } catch (e: Throwable) {
+            Timber.e("Call unsuccessful because ${e.localizedMessage}")
+        }
+
+        return emptyList()
     }
 
     suspend fun getPlayersFromTeam(id: String): List<Player> {
@@ -102,5 +117,29 @@ class TeamRepository(private val service: IService, private val db: ManagedDB) {
         }
 
         return isFavorite
+    }
+
+    fun getFavoriteTeams(): List<Team> {
+        var list = emptyList<Team>()
+
+        db.use {
+            val result = select(TeamColumns.TABLE_NAME).whereArgs("${TeamColumns.C_FAV} = 1")
+            list = result.parseList(classParser())
+        }
+
+        return list
+    }
+
+    suspend fun searchTeamFromAPI(query: String): List<Team> {
+        try {
+            val teamResponse = service.searchTeam(query).await()
+            return teamResponse.teams
+        } catch (e: HttpException) {
+            Timber.e("Error ${e.code()} : ${e.localizedMessage}")
+        } catch (e: Throwable) {
+            Timber.e("Call unsuccessful because ${e.localizedMessage}")
+        }
+
+        return emptyList()
     }
 }

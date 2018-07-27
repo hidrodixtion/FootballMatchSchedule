@@ -19,7 +19,7 @@ class FavoritePagerAdapter(val fm: FragmentManager): FragmentPagerAdapter(fm) {
     override fun getItem(position: Int): Fragment {
         return when (position) {
             0 -> ScheduleFragment.getInstance(ScheduleType.Favorite)
-            else -> TeamFragment.getInstance()
+            else -> TeamFragment.getInstance(true)
         }
     }
 

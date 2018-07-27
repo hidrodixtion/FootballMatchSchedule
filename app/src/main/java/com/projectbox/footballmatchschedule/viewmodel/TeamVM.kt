@@ -25,4 +25,14 @@ class TeamVM(private val teamRepository: TeamRepository) : ViewModel() {
             teamList.value = teamRepository.getTeamFromDB(league)
         }
     }
+
+    fun getFavoriteTeams() {
+        teamList.value = teamRepository.getFavoriteTeams()
+    }
+
+    fun searchTeam(query: String) {
+        launch(UI) {
+            teamList.value = teamRepository.searchTeamFromAPI(query)
+        }
+    }
 }

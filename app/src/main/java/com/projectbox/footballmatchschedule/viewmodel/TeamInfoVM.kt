@@ -4,6 +4,8 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.projectbox.footballmatchschedule.model.response.Team
 import com.projectbox.footballmatchschedule.repository.TeamRepository
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 
 /**
  * Created by adinugroho
@@ -19,12 +21,22 @@ class TeamInfoVM(private val repository: TeamRepository): ViewModel() {
         this.teamID = teamID
 
         val teamResult = repository.getTeamFromID(teamID)
-        team.value = teamResult
-        isFavoriteTeam.value = (teamResult.isFavorited == 1)
+
+        if (teamResult != null) {
+            team.value = teamResult
+            isFavoriteTeam.value = (teamResult.isFavorited == 1)
+        } else {
+            launch(UI) {
+                val result = repository.getTeamFromAPI(teamID)
+                repository.insertTeamsToDB(result)
+                team.value = result.first()
+            }
+        }
     }
 
     fun toggleFavorite() {
-        val teamResult = repository.getTeamFromID(teamID)
+        val teamResult = repository.getTeamFromID(teamID) ?: return
+
         if (teamResult.isFavorited == 1) {
             isFavoriteTeam.value = repository.toggleFavorite(teamID, false)
             message.value = "Team has been removed from favorite"
