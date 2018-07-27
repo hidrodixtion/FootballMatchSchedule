@@ -48,7 +48,7 @@ class ScheduleRepository(private val service: IService, private val db: ManagedD
     suspend fun searchSchedule(query: String): List<Schedule> {
         try {
             val scheduleResponse = service.searchSchedule(query).await()
-            return scheduleResponse.scheduleList
+            return scheduleResponse.scheduleListFromSearch
         } catch (e: HttpException) {
             Timber.e("Error ${e.code()} : ${e.localizedMessage}")
         } catch (e: Throwable) {

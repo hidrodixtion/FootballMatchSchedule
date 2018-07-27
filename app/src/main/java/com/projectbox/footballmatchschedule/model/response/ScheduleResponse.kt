@@ -9,7 +9,10 @@ import kotlinx.android.parcel.Parcelize
  */
 data class ScheduleResponse(
         @SerializedName("events")
-        val scheduleList: List<Schedule>
+        val scheduleList: List<Schedule>,
+
+        @SerializedName("event")
+        val scheduleListFromSearch: List<Schedule>
 )
 
 @Parcelize
@@ -78,5 +81,5 @@ data class Schedule(
         val time: String?,
 
         @SerializedName("strSport")
-        val sport: String
+        val sport: String?
 ) : Parcelable

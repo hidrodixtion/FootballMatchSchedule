@@ -21,6 +21,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.jetbrains.anko.ctx
 import org.jetbrains.anko.startActivity
 import org.koin.android.architecture.ext.viewModel
+import timber.log.Timber
 
 class SearchActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
@@ -62,7 +63,7 @@ class SearchActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     override fun onQueryTextChange(newText: String?): Boolean {
         newText?.let {
-            if (it.length > 3) {
+            if (it.length >= 3) {
                 when (searchType) {
                     SearchType.Schedule -> scheduleVM.searchSchedule(it)
                     SearchType.Team -> teamVM.searchTeam(it)
@@ -101,9 +102,10 @@ class SearchActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private fun initObservers() {
         scheduleVM.scheduleList.observe(this, Observer {
+            Timber.v("HEHE %s", it?.toString())
             it?.let { list ->
-                val soccerList = list.filter { it.sport == "soccer" }
-                scheduleAdapter.update(soccerList)
+                val soccerList = list.filter { it.sport?.toLowerCase() == "soccer" }
+                scheduleAdapter.update(list)
             }
         })
 

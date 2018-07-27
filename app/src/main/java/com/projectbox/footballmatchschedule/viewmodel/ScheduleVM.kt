@@ -46,6 +46,7 @@ class ScheduleVM(private val repository: ScheduleRepository, private val teamRep
     fun searchSchedule(query: String) {
         launch(UI) {
             val result = repository.searchSchedule(query)
+            Timber.v("RESULT $result" )
             scheduleList.value = result
         }
     }
