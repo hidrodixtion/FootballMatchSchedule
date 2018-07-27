@@ -3,7 +3,8 @@ package com.projectbox.footballmatchschedule.viewholder
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.bumptech.glide.Glide
-import com.projectbox.footballmatchschedule.model.Team
+import com.projectbox.footballmatchschedule.model.response.Player
+import com.projectbox.footballmatchschedule.model.response.Team
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_team.*
 
@@ -14,5 +15,10 @@ class TeamItemVH(override val containerView: View): RecyclerView.ViewHolder(cont
     fun bind(item: Team) {
         Glide.with(containerView).load(item.teamBadge).into(img_badge)
         txt_name.text = item.teamName
+    }
+
+    fun bind(player: Player) {
+        Glide.with(containerView).load(player.photo).into(img_badge)
+        txt_name.text = player.name
     }
 }

@@ -18,7 +18,7 @@ class TeamInfoFragment : Fragment() {
     companion object {
         fun getInstance(id: String): TeamInfoFragment {
             val bundle = Bundle()
-            bundle.putString(TeamDetailActivity.Ext_League_ID, id)
+            bundle.putString(TeamDetailActivity.Ext_Team_ID, id)
             val fragment = TeamInfoFragment()
             fragment.arguments = bundle
             return fragment
@@ -39,7 +39,7 @@ class TeamInfoFragment : Fragment() {
         val args = arguments ?: return
 
         initObserver()
-        teamInfoVM.getTeamFromID(args.getString(TeamDetailActivity.Ext_League_ID))
+        teamInfoVM.getTeamFromID(args.getString(TeamDetailActivity.Ext_Team_ID))
     }
 
     private fun initObserver() {

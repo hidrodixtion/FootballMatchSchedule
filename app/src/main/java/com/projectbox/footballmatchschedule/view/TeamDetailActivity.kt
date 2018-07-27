@@ -14,7 +14,7 @@ import org.koin.android.architecture.ext.viewModel
 class TeamDetailActivity : AppCompatActivity() {
 
     companion object {
-        const val Ext_League_ID = "league_id"
+        const val Ext_Team_ID = "team_id"
     }
 
     val teamInfoVM: TeamInfoVM by viewModel()
@@ -39,8 +39,8 @@ class TeamDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = ""
 
-        if (intent.hasExtra(Ext_League_ID)) {
-            view_pager.adapter = TeamDetailPagerAdapter(supportFragmentManager, intent.getStringExtra(Ext_League_ID))
+        if (intent.hasExtra(Ext_Team_ID)) {
+            view_pager.adapter = TeamDetailPagerAdapter(supportFragmentManager, intent.getStringExtra(Ext_Team_ID))
         }
     }
 
@@ -54,6 +54,6 @@ class TeamDetailActivity : AppCompatActivity() {
             }
         })
 
-        teamInfoVM.getTeamFromID(intent.getStringExtra(Ext_League_ID))
+        teamInfoVM.getTeamFromID(intent.getStringExtra(Ext_Team_ID))
     }
 }

@@ -2,9 +2,8 @@ package com.projectbox.footballmatchschedule.viewmodel
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import com.projectbox.footballmatchschedule.db.ManagedDB
 import com.projectbox.footballmatchschedule.model.League
-import com.projectbox.footballmatchschedule.model.Team
+import com.projectbox.footballmatchschedule.model.response.Team
 import com.projectbox.footballmatchschedule.repository.TeamRepository
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch

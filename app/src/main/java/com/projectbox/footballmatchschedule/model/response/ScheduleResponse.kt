@@ -1,4 +1,4 @@
-package com.projectbox.footballmatchschedule.model
+package com.projectbox.footballmatchschedule.model.response
 
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName

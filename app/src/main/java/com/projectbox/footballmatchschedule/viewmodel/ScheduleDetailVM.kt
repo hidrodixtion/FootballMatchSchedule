@@ -5,7 +5,7 @@ import android.arch.lifecycle.ViewModel
 import android.database.sqlite.SQLiteConstraintException
 import com.projectbox.footballmatchschedule.db.FavoriteScheduleColumns
 import com.projectbox.footballmatchschedule.db.ManagedDB
-import com.projectbox.footballmatchschedule.model.Schedule
+import com.projectbox.footballmatchschedule.model.response.Schedule
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.delete
 import org.jetbrains.anko.db.insert

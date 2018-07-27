@@ -2,16 +2,12 @@ package com.projectbox.footballmatchschedule.viewmodel
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.database.sqlite.SQLiteConstraintException
-import com.projectbox.footballmatchschedule.db.*
 import com.projectbox.footballmatchschedule.model.*
+import com.projectbox.footballmatchschedule.model.response.Schedule
 import com.projectbox.footballmatchschedule.repository.ScheduleRepository
 import com.projectbox.footballmatchschedule.repository.TeamRepository
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import org.jetbrains.anko.db.classParser
-import org.jetbrains.anko.db.insert
-import org.jetbrains.anko.db.select
 import timber.log.Timber
 
 /**

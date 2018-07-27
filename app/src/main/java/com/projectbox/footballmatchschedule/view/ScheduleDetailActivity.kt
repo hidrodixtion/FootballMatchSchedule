@@ -6,11 +6,9 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import com.bumptech.glide.Glide
 import com.projectbox.footballmatchschedule.R
 import com.projectbox.footballmatchschedule.helper.DateConverter
-import com.projectbox.footballmatchschedule.model.AppData
-import com.projectbox.footballmatchschedule.model.Schedule
+import com.projectbox.footballmatchschedule.model.response.Schedule
 import com.projectbox.footballmatchschedule.viewmodel.ScheduleDetailVM
 import kotlinx.android.synthetic.main.activity_detail.*
 import org.jetbrains.anko.ctx

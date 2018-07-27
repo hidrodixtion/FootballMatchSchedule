@@ -110,6 +110,6 @@ class MainActivity : AppCompatActivity() {
 
     @Subscribe
     fun onTeamClickEvent(e: TeamClickEvent) {
-        startActivity<TeamDetailActivity>(TeamDetailActivity.Ext_League_ID to e.team.idTeam)
+        startActivity<TeamDetailActivity>(TeamDetailActivity.Ext_Team_ID to e.team.idTeam)
     }
 }

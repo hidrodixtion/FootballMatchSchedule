@@ -4,12 +4,9 @@ import android.database.sqlite.SQLiteConstraintException
 import com.projectbox.footballmatchschedule.IService
 import com.projectbox.footballmatchschedule.db.ManagedDB
 import com.projectbox.footballmatchschedule.db.TeamColumns
-import com.projectbox.footballmatchschedule.model.AppData
 import com.projectbox.footballmatchschedule.model.League
-import com.projectbox.footballmatchschedule.model.Team
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.runBlocking
+import com.projectbox.footballmatchschedule.model.response.Player
+import com.projectbox.footballmatchschedule.model.response.Team
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.insert
 import org.jetbrains.anko.db.select
@@ -74,5 +71,18 @@ class TeamRepository(private val service: IService, private val db: ManagedDB) {
         }
 
         return teams.first()
+    }
+
+    suspend fun getPlayersFromTeam(id: String): List<Player> {
+        try {
+            val response = service.getAllPlayers(id).await()
+            return response.player
+        } catch (e: HttpException) {
+            Timber.e("Error ${e.code()} : ${e.localizedMessage}")
+        } catch (e: Throwable) {
+            Timber.e("Call unsuccessful because ${e.localizedMessage}")
+        }
+
+        return emptyList()
     }
 }

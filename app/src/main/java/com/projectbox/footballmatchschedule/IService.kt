@@ -1,12 +1,10 @@
 package com.projectbox.footballmatchschedule
 
-import com.projectbox.footballmatchschedule.model.ScheduleResponse
-import com.projectbox.footballmatchschedule.model.TeamResponse
-import io.reactivex.Observable
-import okhttp3.Response
+import com.projectbox.footballmatchschedule.model.response.PlayerResponse
+import com.projectbox.footballmatchschedule.model.response.ScheduleResponse
+import com.projectbox.footballmatchschedule.model.response.TeamResponse
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
@@ -21,4 +19,7 @@ interface IService {
 
     @GET("search_all_teams.php")
     fun getAllTeams(@Query("l") leagueName: String): Call<TeamResponse>//Observable<TeamResponse>
+
+    @GET("lookup_all_players.php")
+    fun getAllPlayers(@Query("id") teamID: String): Call<PlayerResponse>
 }

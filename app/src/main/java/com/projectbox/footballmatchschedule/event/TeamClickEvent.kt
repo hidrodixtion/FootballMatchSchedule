@@ -1,6 +1,6 @@
 package com.projectbox.footballmatchschedule.event
 
-import com.projectbox.footballmatchschedule.model.Team
+import com.projectbox.footballmatchschedule.model.response.Team
 
 /**
  * Created by adinugroho

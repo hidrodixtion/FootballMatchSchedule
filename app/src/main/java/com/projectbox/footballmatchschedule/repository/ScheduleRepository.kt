@@ -3,9 +3,8 @@ package com.projectbox.footballmatchschedule.repository
 import com.projectbox.footballmatchschedule.IService
 import com.projectbox.footballmatchschedule.db.FavoriteScheduleColumns
 import com.projectbox.footballmatchschedule.db.ManagedDB
-import com.projectbox.footballmatchschedule.model.Schedule
+import com.projectbox.footballmatchschedule.model.response.Schedule
 import com.projectbox.footballmatchschedule.model.ScheduleType
-import org.jetbrains.anko.db.SelectQueryBuilder
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.select
 import retrofit2.HttpException

@@ -4,10 +4,7 @@ import android.content.Context
 import com.projectbox.footballmatchschedule.db.ManagedDB
 import com.projectbox.footballmatchschedule.repository.ScheduleRepository
 import com.projectbox.footballmatchschedule.repository.TeamRepository
-import com.projectbox.footballmatchschedule.viewmodel.ScheduleDetailVM
-import com.projectbox.footballmatchschedule.viewmodel.ScheduleVM
-import com.projectbox.footballmatchschedule.viewmodel.TeamInfoVM
-import com.projectbox.footballmatchschedule.viewmodel.TeamVM
+import com.projectbox.footballmatchschedule.viewmodel.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.architecture.ext.viewModel
@@ -38,6 +35,7 @@ class KoinModules {
         viewModel { ScheduleDetailVM(get()) }
         viewModel { TeamVM(get()) }
         viewModel { TeamInfoVM(get()) }
+        viewModel { TeamPlayerVM(get()) }
     }
 
     private fun createInterceptor(): OkHttpClient {

@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.projectbox.footballmatchschedule.R
 import com.projectbox.footballmatchschedule.event.ScheduleClickEvent
-import com.projectbox.footballmatchschedule.model.Schedule
+import com.projectbox.footballmatchschedule.model.response.Schedule
 import com.projectbox.footballmatchschedule.viewholder.ScheduleItemVH
 import org.greenrobot.eventbus.EventBus
 import timber.log.Timber

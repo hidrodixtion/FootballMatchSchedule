@@ -3,11 +3,9 @@ package com.projectbox.footballmatchschedule.viewholder
 import android.support.v7.widget.RecyclerView
 import android.view.View
 import com.projectbox.footballmatchschedule.helper.DateConverter
-import com.projectbox.footballmatchschedule.model.Schedule
+import com.projectbox.footballmatchschedule.model.response.Schedule
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_schedule.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * Created by adinugroho
