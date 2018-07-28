@@ -19,6 +19,6 @@ class ScheduleItemVH(override val containerView: View) : RecyclerView.ViewHolder
         txt_away_score.text = schedule.awayScore?.toString()
 
         txt_date.text = DateConverter.convertFromScheduleDate(schedule.date)
-
+        txt_time.text = DateConverter.convertFromScheduleTime(schedule.time)
     }
 }
