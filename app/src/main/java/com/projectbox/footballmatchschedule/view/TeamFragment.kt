@@ -72,6 +72,7 @@ class TeamFragment : Fragment(), AnkoComponent<Context> {
                     listTeam = recyclerView {
                         lparams(width = matchParent, height = wrapContent)
                         layoutManager = LinearLayoutManager(ctx)
+                        id = R.id.recycler_view
                     }
 
                     progressBar = progressBar {

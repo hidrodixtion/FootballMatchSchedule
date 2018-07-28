@@ -6,6 +6,7 @@ import android.support.test.espresso.Espresso.onView
 import android.support.test.espresso.IdlingRegistry
 import android.support.test.espresso.IdlingResource
 import android.support.test.espresso.action.ViewActions.click
+import android.support.test.espresso.action.ViewActions.swipeLeft
 import android.support.test.espresso.assertion.ViewAssertions.matches
 import android.support.test.espresso.contrib.RecyclerViewActions
 import android.support.test.espresso.matcher.ViewMatchers.*
@@ -40,23 +41,72 @@ class AppInstrumentedTest {
 
     @Test
     fun testRecyclerView() {
-        onView(withId(R.id.recycler_view)).check(matches(isDisplayed()))
+        val recyclerView = onView(allOf(isDisplayed(), withId(R.id.recycler_view)))
+        recyclerView.check(matches(isDisplayed()))
 
         try {
-            Thread.sleep(2500)
+            Thread.sleep(700)
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
 
-        onView(withText("Burnley")).check(matches(isDisplayed()))
-
-        onView(allOf(withId(R.id.recycler_view))).perform(
+        recyclerView.perform(
                 RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(2, click()))
 
-        onView(withText("Bournemouth")).check(matches(isDisplayed()))
+        onView(withText("Leicester")).check(matches(isDisplayed()))
 
-        onView(withText("Sun, 13 May 2018")).check(matches(isDisplayed()))
+        onView(withText("Sat, 11 Aug 2018")).check(matches(isDisplayed()))
+    }
 
+    @Test
+    fun testTeamDetail() {
+        onView(withId(R.id.menu_team)).perform(click())
 
+        val recyclerView = onView(allOf(isDisplayed(), withId(R.id.recycler_view)))
+        recyclerView.check(matches(isDisplayed()))
+
+        try {
+            Thread.sleep(700)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+
+        onView(withText("Arsenal")).check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testFavorite() {
+        onView(withId(R.id.menu_team)).perform(click())
+
+        try {
+            Thread.sleep(700)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+
+        val recyclerView = onView(allOf(isDisplayed(), withId(R.id.recycler_view)))
+        recyclerView.check(matches(isDisplayed()))
+
+        try {
+            Thread.sleep(700)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+
+        recyclerView.perform(
+                RecyclerViewActions.actionOnItemAtPosition<RecyclerView.ViewHolder>(0, click()))
+
+        onView(withId(R.id.add_to_favorite)).perform(click())
+
+        Espresso.pressBack()
+
+        onView(withId(R.id.menu_favorite)).perform(click())
+
+        val viewPager = onView(allOf(isDisplayed(), withId(R.id.view_pager)))
+        viewPager.perform(swipeLeft())
+
+        val favRV = onView(allOf(isDisplayed(), withId(R.id.recycler_view)))
+
+        onView(withText("Arsenal")).check(matches(isDisplayed()))
     }
 }
