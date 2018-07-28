@@ -6,5 +6,6 @@ import com.projectbox.footballmatchschedule.model.response.Schedule
  * Created by adinugroho
  */
 data class ScheduleClickEvent(
-        val schedule: Schedule
+        val schedule: Schedule,
+        val isAlarm: Boolean = false
 )

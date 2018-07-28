@@ -1,6 +1,8 @@
 package com.projectbox.footballmatchschedule.view
 
+import android.content.Intent
 import android.os.Bundle
+import android.provider.CalendarContract
 import android.support.design.widget.BottomNavigationView
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v7.app.AppCompatActivity
@@ -10,6 +12,7 @@ import android.view.View
 import com.projectbox.footballmatchschedule.R
 import com.projectbox.footballmatchschedule.event.ScheduleClickEvent
 import com.projectbox.footballmatchschedule.event.TeamClickEvent
+import com.projectbox.footballmatchschedule.helper.DateConverter
 import com.projectbox.footballmatchschedule.pageradapter.FavoritePagerAdapter
 import com.projectbox.footballmatchschedule.pageradapter.SchedulePagerAdapter
 import com.projectbox.footballmatchschedule.pageradapter.TeamPagerAdapter
@@ -18,6 +21,8 @@ import kotlinx.android.synthetic.main.content_main.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.jetbrains.anko.startActivity
+import timber.log.Timber
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -111,7 +116,22 @@ class MainActivity : AppCompatActivity() {
 
     @Subscribe
     fun onScheduleClickEvent(e: ScheduleClickEvent) {
-        startActivity<ScheduleDetailActivity>(ScheduleDetailActivity.EXT_SCHEDULE to e.schedule)
+        if (e.isAlarm) {
+            val calendar = DateConverter.convertToCalendar(e.schedule)
+            val title = "${e.schedule.homeTeam} vs ${e.schedule.awayTeam}"
+
+            val intent = Intent(Intent.ACTION_EDIT)
+            intent.type = "vnd.android.cursor.item/event"
+            intent.putExtra(CalendarContract.Events.TITLE, title)
+            intent.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, calendar.timeInMillis)
+            intent.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, calendar.timeInMillis)
+            intent.putExtra(CalendarContract.Events.ALL_DAY, false)
+            intent.putExtra(CalendarContract.Events.DESCRIPTION, title)
+
+            startActivity(intent)
+        } else {
+            startActivity<ScheduleDetailActivity>(ScheduleDetailActivity.EXT_SCHEDULE to e.schedule)
+        }
     }
 
     @Subscribe

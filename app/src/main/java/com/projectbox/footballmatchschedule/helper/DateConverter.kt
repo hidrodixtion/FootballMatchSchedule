@@ -1,5 +1,6 @@
 package com.projectbox.footballmatchschedule.helper
 
+import com.projectbox.footballmatchschedule.model.response.Schedule
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -32,5 +33,18 @@ object DateConverter {
 
         val sdfFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
         return sdfFormat.format(convertedTime)
+    }
+
+    fun convertToCalendar(schedule: Schedule): Calendar {
+        val date = convertFromScheduleDate(schedule.date)
+        val time = convertFromScheduleTime(schedule.time)
+
+        val sdfConvert = SimpleDateFormat("EEEE, dd MMM yyyy HH:mm", Locale.ENGLISH)
+        val convertedDate = sdfConvert.parse("$date $time")
+
+        val cal = Calendar.getInstance()
+        cal.time = convertedDate
+
+        return cal
     }
 }

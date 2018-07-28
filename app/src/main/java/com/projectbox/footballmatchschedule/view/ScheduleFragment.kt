@@ -91,7 +91,7 @@ class ScheduleFragment : Fragment() {
         recycler_view.layoutManager = LinearLayoutManager(ctx)
         recycler_view.setHasFixedSize(true)
 
-        adapter = ScheduleAdapter(listOf())
+        adapter = ScheduleAdapter(emptyList(), schedule == ScheduleType.Next)
         recycler_view.adapter = adapter
     }
 
