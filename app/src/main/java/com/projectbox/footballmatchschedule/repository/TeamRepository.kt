@@ -65,7 +65,21 @@ class TeamRepository(private val service: IService, private val db: ManagedDB) {
         }
     }
 
-    fun getTeamFromID(teamID: String): Team? {
+    fun getTeamFromID(teamID: String, callback: (Team) -> Unit) {
+        val team = getTeamFromDB(teamID)
+
+        if (team == null) {
+            launch(UI) {
+                val listTeam = getTeamFromAPI(teamID)
+                insertTeamsToDB(listTeam)
+                callback(listTeam.first())
+            }
+        } else {
+            callback(team)
+        }
+    }
+
+    fun getTeamFromDB(teamID: String): Team? {
         var teams = emptyList<Team>()
 
         db.use {

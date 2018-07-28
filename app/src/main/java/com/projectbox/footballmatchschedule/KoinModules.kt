@@ -32,7 +32,7 @@ class KoinModules {
         factory { TeamRepository(get(), get()) }
 
         viewModel { ScheduleVM(get(), get()) }
-        viewModel { ScheduleDetailVM(get()) }
+        viewModel { ScheduleDetailVM(get(), get()) }
         viewModel { TeamVM(get()) }
         viewModel { TeamInfoVM(get()) }
         viewModel { TeamPlayerVM(get()) }

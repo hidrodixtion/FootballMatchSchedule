@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteConstraintException
 import com.projectbox.footballmatchschedule.db.FavoriteScheduleColumns
 import com.projectbox.footballmatchschedule.db.ManagedDB
 import com.projectbox.footballmatchschedule.model.response.Schedule
+import com.projectbox.footballmatchschedule.repository.ScheduleRepository
+import com.projectbox.footballmatchschedule.repository.TeamRepository
 import org.jetbrains.anko.db.classParser
 import org.jetbrains.anko.db.delete
 import org.jetbrains.anko.db.insert
@@ -14,65 +16,45 @@ import org.jetbrains.anko.db.select
 /**
  * Created by adinugroho
  */
-class ScheduleDetailVM(private val db: ManagedDB) : ViewModel() {
+class ScheduleDetailVM(private val scheduleRepository: ScheduleRepository, private val teamRepository: TeamRepository) : ViewModel() {
     var isFavoriteSchedule = MutableLiveData<Boolean>()
     var message = MutableLiveData<String>()
+    var homeBadge = MutableLiveData<String>()
+    var awayBadge = MutableLiveData<String>()
 
     fun checkIfFavoriteSchedule(id: String) {
-        db.use {
-            val result = select(FavoriteScheduleColumns.TABLE_NAME).whereArgs("${FavoriteScheduleColumns.C_ID} = {id}", "id" to id)
-            val favorites = result.parseList(classParser<Schedule>())
-            isFavoriteSchedule.value = (favorites.isNotEmpty())
-        }
+        isFavoriteSchedule.value = scheduleRepository.isFavoriteSchedule(id)
     }
 
     fun addToFavorite(schedule: Schedule) {
-        try {
-            db.use {
-                insert(
-                        FavoriteScheduleColumns.TABLE_NAME,
-                        FavoriteScheduleColumns.C_ID to schedule.scheduleID,
-                        FavoriteScheduleColumns.C_HOME_ID to schedule.homeID,
-                        FavoriteScheduleColumns.C_AWAY_ID to schedule.awayID,
-                        FavoriteScheduleColumns.C_HOME_TEAM to schedule.homeTeam,
-                        FavoriteScheduleColumns.C_AWAY_TEAM to schedule.awayTeam,
-                        FavoriteScheduleColumns.C_HOME_SCORE to schedule.homeScore,
-                        FavoriteScheduleColumns.C_AWAY_SCORE to schedule.awayScore,
-                        FavoriteScheduleColumns.C_HOME_GOAL_DETAILS to schedule.homeGoalDetails,
-                        FavoriteScheduleColumns.C_AWAY_GOAL_DETAILS to schedule.awayGoalDetails,
-                        FavoriteScheduleColumns.C_HOME_SHOTS to schedule.homeShots,
-                        FavoriteScheduleColumns.C_AWAY_SHOTS to schedule.awayShots,
-                        FavoriteScheduleColumns.C_HOME_GK to schedule.homeGK,
-                        FavoriteScheduleColumns.C_HOME_DEF to schedule.homeDef,
-                        FavoriteScheduleColumns.C_HOME_MID to schedule.homeMid,
-                        FavoriteScheduleColumns.C_HOME_FW to schedule.homeFW,
-                        FavoriteScheduleColumns.C_AWAY_GK to schedule.awayGK,
-                        FavoriteScheduleColumns.C_AWAY_DEF to schedule.awayDef,
-                        FavoriteScheduleColumns.C_AWAY_MID to schedule.awayMid,
-                        FavoriteScheduleColumns.C_AWAY_FW to schedule.awayFW,
-                        FavoriteScheduleColumns.C_DATE to schedule.date,
-                        FavoriteScheduleColumns.C_TIME to schedule.time,
-                        FavoriteScheduleColumns.C_SPORT to "soccer"
-                )
+        val errMessage = scheduleRepository.addToFavorite(schedule)
 
-                isFavoriteSchedule.value = true
-                message.value = "Schedule has been added to Favorites"
-            }
-        } catch (err: SQLiteConstraintException) {
-            message.value = err.localizedMessage
+        if (errMessage.isNullOrEmpty()) {
+            isFavoriteSchedule.value = true
+            message.value = "Schedule has been added to Favorites"
+        } else {
+            message.value = errMessage
         }
     }
 
     fun removeFromFavorite(schedule: Schedule) {
-        try {
-            db.use {
-                delete(FavoriteScheduleColumns.TABLE_NAME, "${FavoriteScheduleColumns.C_ID} = {id}", "id" to schedule.scheduleID)
-            }
+        val errMessage = scheduleRepository.removeFromFavorite(schedule.scheduleID)
 
+        if (errMessage.isNullOrEmpty()) {
             isFavoriteSchedule.value = false
             message.value = "Schedule has been removed from Favorites"
-        } catch (err: SQLiteConstraintException) {
-            message.value = err.localizedMessage
+        } else {
+            message.value = errMessage
+        }
+    }
+
+    fun getTeamBadges(homeID: String, awayID: String) {
+        teamRepository.getTeamFromID(homeID) {
+            homeBadge.value = it.teamBadge
+        }
+
+        teamRepository.getTeamFromID(awayID) {
+            awayBadge.value = it.teamBadge
         }
     }
 }

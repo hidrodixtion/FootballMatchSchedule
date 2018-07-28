@@ -20,7 +20,7 @@ class TeamInfoVM(private val repository: TeamRepository): ViewModel() {
     fun getTeamFromID(teamID: String) {
         this.teamID = teamID
 
-        val teamResult = repository.getTeamFromID(teamID)
+        val teamResult = repository.getTeamFromDB(teamID)
 
         if (teamResult != null) {
             team.value = teamResult
@@ -35,7 +35,7 @@ class TeamInfoVM(private val repository: TeamRepository): ViewModel() {
     }
 
     fun toggleFavorite() {
-        val teamResult = repository.getTeamFromID(teamID) ?: return
+        val teamResult = repository.getTeamFromDB(teamID) ?: return
 
         if (teamResult.isFavorited == 1) {
             isFavoriteTeam.value = repository.toggleFavorite(teamID, false)

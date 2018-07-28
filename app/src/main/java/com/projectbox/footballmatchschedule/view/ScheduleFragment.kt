@@ -15,6 +15,7 @@ import com.projectbox.footballmatchschedule.R
 import com.projectbox.footballmatchschedule.adapter.ScheduleAdapter
 import com.projectbox.footballmatchschedule.model.AppData
 import com.projectbox.footballmatchschedule.model.ScheduleType
+import com.projectbox.footballmatchschedule.model.response.Schedule
 import com.projectbox.footballmatchschedule.viewmodel.ScheduleVM
 import kotlinx.android.synthetic.main.fragment_schedule.*
 import org.jetbrains.anko.support.v4.ctx
@@ -41,6 +42,7 @@ class ScheduleFragment : Fragment() {
     private val vmSchedule by viewModel<ScheduleVM>()
 
     private lateinit var adapter: ScheduleAdapter
+    private lateinit var schedule: ScheduleType
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -54,9 +56,16 @@ class ScheduleFragment : Fragment() {
         initVMObserver()
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (schedule == ScheduleType.Favorite) {
+            vmSchedule.getSchedule(schedule)
+        }
+    }
+
     private fun initUI() {
         val args = arguments ?: return
-        val schedule = ScheduleType.valueOf(args.getString(EXT_SCHEDULE))
+        schedule = ScheduleType.valueOf(args.getString(EXT_SCHEDULE))
 
         swipe_refresh.setColorSchemeResources(
                 R.color.colorAccent,

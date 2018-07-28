@@ -6,10 +6,12 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import com.bumptech.glide.Glide
 import com.projectbox.footballmatchschedule.R
 import com.projectbox.footballmatchschedule.helper.DateConverter
 import com.projectbox.footballmatchschedule.model.response.Schedule
 import com.projectbox.footballmatchschedule.viewmodel.ScheduleDetailVM
+import com.projectbox.footballmatchschedule.viewmodel.TeamInfoVM
 import kotlinx.android.synthetic.main.activity_detail.*
 import org.jetbrains.anko.ctx
 import org.jetbrains.anko.design.snackbar
@@ -74,16 +76,6 @@ class ScheduleDetailActivity : AppCompatActivity() {
 
         schedule = intent.getParcelableExtra(EXT_SCHEDULE)
 
-//        val homeBadge = AppData.teamData.firstOrNull { it.idTeam == schedule.homeID }
-//        if (homeBadge != null) {
-//            Glide.with(this).load(homeBadge.teamBadge).into(img_home)
-//        }
-//
-//        val awayBadge = AppData.teamData.firstOrNull { it.idTeam == schedule.awayID }
-//        if (awayBadge != null) {
-//            Glide.with(this).load(awayBadge.teamBadge).into(img_away)
-//        }
-
         txt_date.text = DateConverter.convertFromScheduleDate(schedule.date)
         txt_home.text = schedule.homeTeam
         txt_away.text = schedule.awayTeam
@@ -130,7 +122,20 @@ class ScheduleDetailActivity : AppCompatActivity() {
             snackbar(scroll_view, msg).show()
         })
 
+        vmDetail.homeBadge.observe(this, Observer {
+            it?.let {
+                Glide.with(this).load(it).into(img_home)
+            }
+        })
+
+        vmDetail.awayBadge.observe(this, Observer {
+            it?.let {
+                Glide.with(this).load(it).into(img_away)
+            }
+        })
+
         vmDetail.checkIfFavoriteSchedule(schedule.scheduleID)
+        vmDetail.getTeamBadges(schedule.homeID, schedule.awayID)
     }
 
     private fun toggleFavorite() {

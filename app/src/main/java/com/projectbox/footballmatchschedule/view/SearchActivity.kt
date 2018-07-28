@@ -68,6 +68,11 @@ class SearchActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                     SearchType.Schedule -> scheduleVM.searchSchedule(it)
                     SearchType.Team -> teamVM.searchTeam(it)
                 }
+            } else {
+                when (searchType) {
+                    SearchType.Schedule -> scheduleAdapter.update(emptyList())
+                    SearchType.Team -> teamAdapter.updateTeams(emptyList())
+                }
             }
 
             return true
@@ -102,10 +107,11 @@ class SearchActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private fun initObservers() {
         scheduleVM.scheduleList.observe(this, Observer {
-            Timber.v("HEHE %s", it?.toString())
-            it?.let { list ->
-                val soccerList = list.filter { it.sport?.toLowerCase() == "soccer" }
-                scheduleAdapter.update(list)
+            if (it == null) {
+                scheduleAdapter.update(emptyList())
+            } else {
+                val soccerList = it.filter { it.sport.toLowerCase() == "soccer" }
+                scheduleAdapter.update(soccerList)
             }
         })
 

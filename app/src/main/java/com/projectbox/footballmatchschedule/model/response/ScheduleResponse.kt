@@ -81,5 +81,5 @@ data class Schedule(
         val time: String?,
 
         @SerializedName("strSport")
-        val sport: String?
+        val sport: String
 ) : Parcelable
