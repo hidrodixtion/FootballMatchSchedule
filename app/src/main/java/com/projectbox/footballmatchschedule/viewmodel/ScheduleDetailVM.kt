@@ -2,32 +2,30 @@ package com.projectbox.footballmatchschedule.viewmodel
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.database.sqlite.SQLiteConstraintException
-import com.projectbox.footballmatchschedule.db.FavoriteScheduleColumns
-import com.projectbox.footballmatchschedule.db.ManagedDB
 import com.projectbox.footballmatchschedule.model.response.Schedule
-import com.projectbox.footballmatchschedule.repository.ScheduleRepository
-import com.projectbox.footballmatchschedule.repository.TeamRepository
-import org.jetbrains.anko.db.classParser
-import org.jetbrains.anko.db.delete
-import org.jetbrains.anko.db.insert
-import org.jetbrains.anko.db.select
+import com.projectbox.footballmatchschedule.model.response.Team
+import com.projectbox.footballmatchschedule.repository.ScheduleAPIRepository
+import com.projectbox.footballmatchschedule.repository.ScheduleDBRepository
+import com.projectbox.footballmatchschedule.repository.TeamAPIRepository
+import com.projectbox.footballmatchschedule.repository.TeamDBRepository
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 
 /**
  * Created by adinugroho
  */
-class ScheduleDetailVM(private val scheduleRepository: ScheduleRepository, private val teamRepository: TeamRepository) : ViewModel() {
+class ScheduleDetailVM(private val db: ScheduleDBRepository, private val teamAPI: TeamAPIRepository, private val teamDB: TeamDBRepository) : ViewModel() {
     var isFavoriteSchedule = MutableLiveData<Boolean>()
     var message = MutableLiveData<String>()
     var homeBadge = MutableLiveData<String>()
     var awayBadge = MutableLiveData<String>()
 
     fun checkIfFavoriteSchedule(id: String) {
-        isFavoriteSchedule.value = scheduleRepository.isFavoriteSchedule(id)
+        isFavoriteSchedule.value = db.isFavoriteSchedule(id)
     }
 
     fun addToFavorite(schedule: Schedule) {
-        val errMessage = scheduleRepository.addToFavorite(schedule)
+        val errMessage = db.addToFavorite(schedule)
 
         if (errMessage.isNullOrEmpty()) {
             isFavoriteSchedule.value = true
@@ -38,7 +36,7 @@ class ScheduleDetailVM(private val scheduleRepository: ScheduleRepository, priva
     }
 
     fun removeFromFavorite(schedule: Schedule) {
-        val errMessage = scheduleRepository.removeFromFavorite(schedule.scheduleID)
+        val errMessage = db.removeFromFavorite(schedule.scheduleID)
 
         if (errMessage.isNullOrEmpty()) {
             isFavoriteSchedule.value = false
@@ -49,12 +47,26 @@ class ScheduleDetailVM(private val scheduleRepository: ScheduleRepository, priva
     }
 
     fun getTeamBadges(homeID: String, awayID: String) {
-        teamRepository.getTeamFromID(homeID) {
+        getTeamFromID(homeID) {
             homeBadge.value = it.teamBadge
         }
 
-        teamRepository.getTeamFromID(awayID) {
+        getTeamFromID(awayID) {
             awayBadge.value = it.teamBadge
+        }
+    }
+
+    private fun getTeamFromID(id: String, callback: (Team) -> Unit) {
+        val team = teamDB.getTeamFromDB(id)
+
+        if (team == null) {
+            launch(UI) {
+                val listTeam = teamAPI.getTeamFromAPI(id)
+                teamDB.insertTeamsToDB(listTeam)
+                callback(listTeam.first())
+            }
+        } else {
+            callback(team)
         }
     }
 }

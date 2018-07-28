@@ -2,8 +2,10 @@ package com.projectbox.footballmatchschedule
 
 import android.content.Context
 import com.projectbox.footballmatchschedule.db.ManagedDB
-import com.projectbox.footballmatchschedule.repository.ScheduleRepository
-import com.projectbox.footballmatchschedule.repository.TeamRepository
+import com.projectbox.footballmatchschedule.repository.ScheduleAPIRepository
+import com.projectbox.footballmatchschedule.repository.ScheduleDBRepository
+import com.projectbox.footballmatchschedule.repository.TeamAPIRepository
+import com.projectbox.footballmatchschedule.repository.TeamDBRepository
 import com.projectbox.footballmatchschedule.viewmodel.*
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -28,13 +30,15 @@ class KoinModules {
         bean { createService(get()) }
         bean { createManagedDB(get()) }
 
-        factory { ScheduleRepository(get(), get()) }
-        factory { TeamRepository(get(), get()) }
+        factory { ScheduleAPIRepository(get()) }
+        factory { TeamAPIRepository(get()) }
+        factory { ScheduleDBRepository(get()) }
+        factory { TeamDBRepository(get()) }
 
-        viewModel { ScheduleVM(get(), get()) }
-        viewModel { ScheduleDetailVM(get(), get()) }
-        viewModel { TeamVM(get()) }
-        viewModel { TeamInfoVM(get()) }
+        viewModel { ScheduleVM(get(), get(), get(), get()) }
+        viewModel { ScheduleDetailVM(get(), get(), get()) }
+        viewModel { TeamVM(get(), get()) }
+        viewModel { TeamInfoVM(get(), get()) }
         viewModel { TeamPlayerVM(get()) }
     }
 
